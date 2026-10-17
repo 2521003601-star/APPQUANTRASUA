@@ -13,9 +13,10 @@ st.set_page_config(
 
 # Danh sách menu & giá (VND)
 MENU_TEA = {
-    "Trà Sữa Truyền Thống": 30000,
-    "Trà Sữa Trân Châu Đường Đen": 35000,
-    "Trà Sữa Thái Xanh": 32000,
+    "Trà Sữa Truyền Thống chika": 30000,
+    "Trà Sữa Trân Châu Đường Đen usagi": 35000,
+    "Trà Sữa Thái Xanh hachiware": 32000,
+    "Trà sữa Gạo Rang": 30000,
     "Trà Sữa Ô Long": 35000,
     "Trà Sữa Matcha": 38000,
     "Trà Sữa Dâu Tây": 35000,
@@ -77,7 +78,7 @@ def create_txt_invoice(customer_name, cart, total_amount, discount, final_amount
 # ---------------------------------------------------------
 # GIAO DIỆN CHÍNH
 # ---------------------------------------------------------
-st.title("QUÁN TRÀ SỮA MR BÌNH")
+st.title("QUÁN TRÀ SỮA CHIIKAWA")
 st.markdown("---")
 
 col_left, col_right = st.columns([1.1, 0.9])
