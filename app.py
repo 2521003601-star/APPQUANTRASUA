@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-st.image("TRASUA.jpg")
 
 # ---------------------------------------------------------
 # CẤU HÌNH TRANG (Phải là lệnh Streamlit đầu tiên)
@@ -174,95 +173,4 @@ with col_right:
         # Hiển thị giỏ hàng bằng Bảng Pandas
         df_cart = pd.DataFrame(st.session_state.cart)
         
-        # Format bảng hiển thị
-        st.dataframe(
-            df_cart[["Tên món", "Size", "Topping", "Số lượng", "Đơn giá", "Thành tiền"]],
-            use_container_width=True,
-            hide_index=True
-        )
-
-        # Nút xóa giỏ hàng
-        if st.button("🗑️ Xóa tất cả món"):
-            st.session_state.cart = []
-            st.session_state.invoice_paid = False
-            st.rerun()
-
-        st.markdown("---")
-        
-        # Tính tổng số lượng ly nước và tổng tiền
-        total_items_count = df_cart["Số lượng"].sum()
-        total_price = df_cart["Thành tiền"].sum()
-
-        # 🎁 CHƯƠNG TRÌNH TẶNG QUÀ TRI ÂN KHÁCH HÀNG
-        selected_gift = None
-        if total_items_count >= 5:
-            st.success(f"🎉 Bạn đã mua **{total_items_count}** món nước (từ 5 món trở lên)! Bạn nhận được **1 gấu bông Chiikawa tri án**.")
-            col_gift_select, col_gift_img = st.columns([2, 1])
-            with col_gift_select:
-                selected_gift = st.selectbox("🎁 Chọn quà tặng gấu bông:", list(GIFT_OPTIONS.keys()))
-            with col_gift_img:
-                gift_img_path = GIFT_OPTIONS[selected_gift]
-                try:
-                    st.image(gift_img_path, caption=selected_gift, width=100)
-                except Exception:
-                    st.caption(f"📌 [{gift_img_path}]")
-        else:
-            st.info(f"💡 Mua thêm **{5 - total_items_count}** món nước nữa để nhận ngay 1 gấu bông Chiikawa!")
-
-        col_disc, col_pay = st.columns(2)
-        with col_disc:
-            discount = st.number_input("Giảm giá (%):", min_value=0, max_value=100, value=0, step=5)
-        
-        final_price = int(total_price * (1 - discount / 100))
-
-        st.markdown(f"### Tổng tiền: **{total_price:,} VNĐ**")
-        if discount > 0:
-            st.markdown(f"### Sau giảm giá ({discount}%): <span style='color:red'>{final_price:,} VNĐ</span>", unsafe_allow_html=True)
-
-        # Nút Bấm Thanh Toán
-        if st.button("💳 XÁC NHẬN THANH TOÁN", type="primary", use_container_width=True):
-            st.session_state.invoice_paid = True
-            st.balloons()
-
-# ---------------------------------------------------------
-# XUẤT HÓA ĐƠN KHI ĐÃ THANH TOÁN
-# ---------------------------------------------------------
-if st.session_state.get("invoice_paid") and st.session_state.cart:
-    st.markdown("---")
-    st.success("🎉 Thanh toán thành công! Dưới đây là hóa đơn chi tiết:")
-
-    # Hiển thị hóa đơn trực quan
-    invoice_box = st.container(border=True)
-    with invoice_box:
-        st.markdown("<h2 style='text-align: center; color: #FF4B4B;'>🧋 HÓA ĐƠN BÁN HÀNG - BOBA TEA</h2>", unsafe_allow_html=True)
-        st.write(f"**Thời gian:** {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
-        st.write(f"**Khách hàng:** {customer_name if customer_name else 'Khách vãng lai'}")
-        
-        st.table(pd.DataFrame(st.session_state.cart)[["Tên món", "Size", "Đường", "Đá", "Topping", "Số lượng", "Thành tiền"]])
-        
-        c1, c2 = st.columns(2)
-        with c1:
-            st.write(f"**Tổng tiền món:** {total_price:,} VNĐ")
-            st.write(f"**Giảm giá:** {discount}%")
-            if selected_gift:
-                st.write(f"**🎁 Quà tặng kèm:** {selected_gift}")
-        with c2:
-            st.markdown(f"### TỔNG CỦA BẠN: <span style='color:red'>{final_price:,} VNĐ</span>", unsafe_allow_html=True)
-
-    # Chuẩn bị file tải về dạng TXT
-    txt_data = create_txt_invoice(customer_name, st.session_state.cart, total_price, discount, final_price, selected_gift)
-    
-    col_dl1, col_dl2 = st.columns(2)
-    with col_dl1:
-        st.download_button(
-            label="📥 Tải hóa đơn (.TXT)",
-            data=txt_data,
-            file_name=f"HoaDon_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
-            mime="text/plain",
-            use_container_width=True
-        )
-    with col_dl2:
-        if st.button("🔄 Tạo đơn hàng mới", use_container_width=True):
-            st.session_state.cart = []
-            st.session_state.invoice_paid = False
-            st.rerun()
+        # Format
