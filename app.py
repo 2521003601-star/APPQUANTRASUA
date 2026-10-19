@@ -1,27 +1,30 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-st.image("TRASUA.jpg")
+
 # ---------------------------------------------------------
-# CẤU HÌNH TRANG & CƠ SỞ DỮ LIỆU SẢN PHẨM
+# CẤU HÌNH TRANG (Phải là lệnh Streamlit đầu tiên)
 # ---------------------------------------------------------
 st.set_page_config(
-    page_title="Hệ Thống Tính Tiền Trà Sữa",
+    page_title="Hệ Thống Tính Tiền Trà Sữa Chiikawa",
     page_icon="🧋",
     layout="wide"
 )
 
-# Danh sách menu & giá (VND)
+# ---------------------------------------------------------
+# CƠ SỞ DỮ LIỆU SẢN PHẨM & CẤU HÌNH
+# ---------------------------------------------------------
+# Danh sách menu, giá (VND) và tên file ảnh tương ứng
 MENU_TEA = {
-    "Trà Sữa Truyền Thống chika": 30000,
-    "Trà Sữa Trân Châu Đường Đen usagi": 35000,
-    "Trà Sữa Thái Xanh hachiware": 32000,
-    "Trà sữa Gạo Rang": 30000,
-    "Trà Sữa Ô Long": 35000,
-    "Trà Sữa Matcha": 38000,
-    "Trà Sữa Dâu Tây": 35000,
-    "Trà Đào Cam Sả": 35000,
-    "Trà Dâu Tằm": 32000,
+    "Trà Sữa Truyền Thống chika": {"price": 30000, "image": "TRASUA1.jpg"},
+    "Trà Sữa Trân Châu Đường Đen usagi": {"price": 35000, "image": "TRASUA2.jpg"},
+    "Trà Sữa Thái Xanh hachiware": {"price": 32000, "image": "TRASUA3.jpg"},
+    "Trà sữa Gạo Rang": {"price": 30000, "image": "TRASUA4.jpg"},
+    "Trà Sữa Ô Long": {"price": 35000, "image": "TRASUA5.jpg"},
+    "Trà Sữa Matcha": {"price": 38000, "image": "TRASUA6.jpg"},
+    "Trà Sữa Dâu Tây": {"price": 35000, "image": "TRASUA7.jpg"},
+    "Trà Đào Cam Sả": {"price": 35000, "image": "TRASUA8.jpg"},
+    "Trà Dâu Tằm": {"price": 32000, "image": "TRASUA9.jpg"},
 }
 
 SIZE_OPTIONS = {
@@ -38,10 +41,17 @@ TOPPING_OPTIONS = {
     "Kem Cheese": 10000
 }
 
+# Danh sách quà tặng gấu bông Chiikawa (khi mua từ 5 món trở lên)
+GIFT_OPTIONS = {
+    "Gấu bông Chiikawa": "GAUBONG1.jpg",
+    "Gấu bông Hachiware": "GAUBONG2.jpg",
+    "Gấu bông Usagi": "GAUBONG3.jpg"
+}
+
 SUGAR_LEVELS = ["100% (Bình thường)", "70%", "50%", "30%", "0% (Không đường)"]
 ICE_LEVELS = ["100% (Bình thường)", "70%", "50%", "30%", "0% (Không đá)"]
 
-# Khởi tạo session state lưu trữ giỏ hàng và trạng thái hóa đơn
+# Khởi tạo session state
 if "cart" not in st.session_state:
     st.session_state.cart = []
 if "invoice_paid" not in st.session_state:
@@ -50,7 +60,7 @@ if "invoice_paid" not in st.session_state:
 # ---------------------------------------------------------
 # HÀM XUẤT HÓA ĐƠN DẠNG TEXT (.TXT)
 # ---------------------------------------------------------
-def create_txt_invoice(customer_name, cart, total_amount, discount, final_amount):
+def create_txt_invoice(customer_name, cart, total_amount, discount, final_amount, gift_item=None):
     """Tạo file hóa đơn dạng văn bản (TXT)"""
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     content = f"{'='*40}\n"
@@ -71,6 +81,11 @@ def create_txt_invoice(customer_name, cart, total_amount, discount, final_amount
     content += f"Tổng tiền món: {total_amount:,} VNĐ\n"
     content += f"Giảm giá: {discount}%\n"
     content += f"TỔNG THANH TOÁN: {final_amount:,} VNĐ\n"
+    
+    if gift_item:
+        content += f"{'-'*40}\n"
+        content += f"🎁 QUÀ TẶNG TRI ÂN: {gift_item}\n"
+        
     content += f"{'='*40}\n"
     content += f"{'Cảm ơn quý khách và hẹn gặp lại!':^40}\n"
     return content
@@ -78,7 +93,7 @@ def create_txt_invoice(customer_name, cart, total_amount, discount, final_amount
 # ---------------------------------------------------------
 # GIAO DIỆN CHÍNH
 # ---------------------------------------------------------
-st.title("QUÁN TRÀ SỮA CHIIKAWA")
+st.title("🧋 QUÁN TRÀ SỮA CHIIKAWA")
 st.markdown("---")
 
 col_left, col_right = st.columns([1.1, 0.9])
@@ -99,6 +114,13 @@ with col_left:
     with col_qty:
         quantity = st.number_input("Số lượng:", min_value=1, value=1, step=1)
 
+    # Hiển thị ảnh món nước được chọn
+    tea_img_path = MENU_TEA[selected_tea]["image"]
+    try:
+        st.image(tea_img_path, caption=f"Hình ảnh: {selected_tea}", width=250)
+    except Exception:
+        st.info(f"📌 [Ảnh món nước {tea_img_path} chưa được đặt đúng thư mục]")
+
     # 3. Size, Đường, Đá
     c_size, c_sugar, c_ice = st.columns(3)
     with c_size:
@@ -115,7 +137,7 @@ with col_left:
     )
 
     # Tính giá tiền từng ly
-    base_price = MENU_TEA[selected_tea]
+    base_price = MENU_TEA[selected_tea]["price"]
     size_price = SIZE_OPTIONS[selected_size]
     topping_price = sum(TOPPING_OPTIONS[t] for t in selected_toppings)
     unit_price = base_price + size_price + topping_price
@@ -146,6 +168,7 @@ with col_right:
 
     if not st.session_state.cart:
         st.warning("Giỏ hàng hiện đang trống. Vui lòng chọn món ở cột bên trái.")
+        selected_gift = None
     else:
         # Hiển thị giỏ hàng bằng Bảng Pandas
         df_cart = pd.DataFrame(st.session_state.cart)
@@ -165,9 +188,26 @@ with col_right:
 
         st.markdown("---")
         
-        # Tính tổng tiền
+        # Tính tổng số lượng ly nước và tổng tiền
+        total_items_count = df_cart["Số lượng"].sum()
         total_price = df_cart["Thành tiền"].sum()
-        
+
+        # 🎁 CHƯƠNG TRÌNH TẶNG QUÀ TRI ÂN KHÁCH HÀNG
+        selected_gift = None
+        if total_items_count >= 5:
+            st.success(f"🎉 Bạn đã mua **{total_items_count}** món nước (từ 5 món trở lên)! Bạn nhận được **1 gấu bông Chiikawa tri án**.")
+            col_gift_select, col_gift_img = st.columns([2, 1])
+            with col_gift_select:
+                selected_gift = st.selectbox("🎁 Chọn quà tặng gấu bông:", list(GIFT_OPTIONS.keys()))
+            with col_gift_img:
+                gift_img_path = GIFT_OPTIONS[selected_gift]
+                try:
+                    st.image(gift_img_path, caption=selected_gift, width=100)
+                except Exception:
+                    st.caption(f"📌 [{gift_img_path}]")
+        else:
+            st.info(f"💡 Mua thêm **{5 - total_items_count}** món nước nữa để nhận ngay 1 gấu bông Chiikawa!")
+
         col_disc, col_pay = st.columns(2)
         with col_disc:
             discount = st.number_input("Giảm giá (%):", min_value=0, max_value=100, value=0, step=5)
@@ -203,11 +243,13 @@ if st.session_state.get("invoice_paid") and st.session_state.cart:
         with c1:
             st.write(f"**Tổng tiền món:** {total_price:,} VNĐ")
             st.write(f"**Giảm giá:** {discount}%")
+            if selected_gift:
+                st.write(f"**🎁 Quà tặng kèm:** {selected_gift}")
         with c2:
             st.markdown(f"### TỔNG CỦA BẠN: <span style='color:red'>{final_price:,} VNĐ</span>", unsafe_allow_html=True)
 
     # Chuẩn bị file tải về dạng TXT
-    txt_data = create_txt_invoice(customer_name, st.session_state.cart, total_price, discount, final_price)
+    txt_data = create_txt_invoice(customer_name, st.session_state.cart, total_price, discount, final_price, selected_gift)
     
     col_dl1, col_dl2 = st.columns(2)
     with col_dl1:
