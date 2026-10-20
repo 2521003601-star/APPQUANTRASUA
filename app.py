@@ -152,16 +152,16 @@ HEIGHT_MAP = {
 # Bản đồ quy đổi Đá thành Icon viên đá
 ICE_ICON_MAP = {
     "0%": "",
-    "30%": "🧊",
-    "50%": "🧊 🧊",
-    "100%": "🧊 🧊 🧊"
+    "30%": "🧊🧊 🧊 🧊",
+    "50%": "🧊 🧊🧊 🧊 🧊 🧊 🧊🧊",
+    "100%": "🧊 🧊 🧊🧊 🧊 🧊🧊 🧊 🧊 🧊 🧊🧊"
 }
 
 # Bản đồ quy đổi Topping thành Icon
 TOPPING_ICON_MAP = {
-    "Trân châu đen": "🧋",
-    "Pudding trứng": "🍮",
-    "Kem Cheese": "🧀"
+    "Trân châu đen": "⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫",
+    "Pudding trứng": "🍮🍮🍮🍮🍮",
+    "Kem Cheese": "🧀🧀🧀🧀🧀🧀"
 }
 
 BOOKS_LIST = [
