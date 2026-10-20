@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import random
 
 # ---------------------------------------------------------
 # 1. CẤU HÌNH TRANG STREAMLIT
@@ -11,7 +12,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 2. CUSTOM CSS GIAO DIỆN & MÔ PHỎNG LY NƯỚC ĐỘNG
+# 2. CUSTOM CSS GIAO DIỆN HỒNG PASTEL & CHẤM BI ĐA SẮC
 # ---------------------------------------------------------
 st.markdown("""
 <style>
@@ -20,43 +21,52 @@ st.markdown("""
     html, body, [class*="css"] {
         font-family: 'Quicksand', sans-serif;
     }
+    
+    /* Background Hồng Pastel kèm họa tiết Chấm bi pastel đa sắc */
     .stApp {
-        background-color: #FAF8F5;
+        background-color: #FFF0F5;
+        background-image: 
+            radial-gradient(#FFB6C1 15%, transparent 16%),
+            radial-gradient(#B0E0E6 15%, transparent 16%),
+            radial-gradient(#E6E6FA 15%, transparent 16%),
+            radial-gradient(#FFFACD 15%, transparent 16%);
+        background-size: 60px 60px;
+        background-position: 0 0, 30px 30px, 30px 0, 0 30px;
     }
     
     /* Header Branding */
     .brand-header {
         text-align: center;
-        padding: 18px;
-        background: linear-gradient(135deg, #A8E6CF, #DCEDC1);
-        border-radius: 18px;
+        padding: 20px;
+        background: linear-gradient(135deg, #FFB7B2, #FFDAC1);
+        border-radius: 20px;
         margin-bottom: 25px;
-        color: #2D5A27;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        color: #6B4226;
+        box-shadow: 0 6px 15px rgba(255, 182, 193, 0.4);
     }
     
-    /* Card Sản phẩm */
+    /* Card Sản phẩm & Nội dung */
     .menu-card {
-        background: #FFFFFF;
-        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px;
         padding: 15px;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        border: 2px solid #FFC0CB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         text-align: center;
         margin-bottom: 20px;
     }
 
-    /* Hiển thị ly nước mô phỏng kiểu Oatside nâng cấp */
+    /* Hiển thị ly nước mô phỏng kiểu Oatside */
     .boba-cup {
         width: 140px;
         height: 200px;
-        border: 4px solid #1A1A1A;
+        border: 4px solid #4A3E3D;
         border-radius: 0 0 25px 25px;
         margin: auto;
         position: relative;
         overflow: hidden;
         background: #FFFFFF;
-        box-shadow: 4px 4px 0px #1A1A1A;
+        box-shadow: 4px 4px 0px #FFB6C1;
     }
     .boba-liquid {
         position: absolute;
@@ -64,7 +74,6 @@ st.markdown("""
         width: 100%;
         transition: height 0.3s ease, background-color 0.3s ease;
     }
-    /* Icon Đá rơi phía trên */
     .boba-ice {
         position: absolute;
         top: 20px;
@@ -74,7 +83,6 @@ st.markdown("""
         z-index: 6;
         user-select: none;
     }
-    /* Icon Topping xếp đáy ly */
     .boba-topping {
         position: absolute;
         bottom: 5px;
@@ -90,18 +98,36 @@ st.markdown("""
         text-align: center;
         font-size: 1.1rem;
         font-weight: 700;
-        color: #2F855A;
-        background: #EDFDFA;
+        color: #8B4513;
+        background: #FFF5F7;
         padding: 15px;
-        border-radius: 12px;
-        border: 2px dashed #38B2AC;
+        border-radius: 15px;
+        border: 2px dashed #FFB6C1;
         margin-top: 30px;
+    }
+    
+    /* Styling riêng cho Minigame */
+    .game-box {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 25px;
+        border-radius: 20px;
+        border: 3px solid #FFB6C1;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    }
+    .positive-message {
+        background-color: #E8F5E9;
+        color: #2E7D32;
+        padding: 12px 18px;
+        border-radius: 12px;
+        border-left: 5px solid #4CAF50;
+        font-weight: 600;
+        margin-top: 10px;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 3. KHO DỮ LIỆU CÁC MỤC
+# 3. KHO DỮ LIỆU CÁC MỤC & DỮ LIỆU GAME
 # ---------------------------------------------------------
 SEASONS_MENU = {
     "Mùa Xuân": [
@@ -149,258 +175,17 @@ HEIGHT_MAP = {
     "L (Đặc biệt)": "95%"
 }
 
-# Bản đồ quy đổi Đá thành Icon viên đá
 ICE_ICON_MAP = {
     "0%": "",
-    "30%": "🧊🧊 🧊 🧊",
-    "50%": "🧊 🧊🧊 🧊 🧊 🧊🧊🧊 🧊 🧊 🧊 🧊🧊",
-    "100%": "🧊 🧊 🧊🧊 🧊 🧊🧊 🧊 🧊🧊🧊🧊 🧊 🧊 🧊 🧊 🧊 🧊🧊 🧊 🧊🧊"
+    "30%": "🧊",
+    "50%": "🧊 🧊",
+    "100%": "🧊 🧊 🧊"
 }
 
-# Bản đồ quy đổi Topping thành Icon
 TOPPING_ICON_MAP = {
-    "Trân châu đen": "⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫",
-    "Pudding trứng": "🍮🍮🍮🍮🍮",
-    "Kem Cheese": "🧀🧀🧀🧀🧀🧀"
+    "Trân châu đen": "🧋",
+    "Pudding trứng": "🍮",
+    "Kem Cheese": "🧀"
 }
 
-BOOKS_LIST = [
-    {"title": "Kiêu Hãnh và Định Kiến", "img": "28.jpg"},
-    {"title": "Những Người Khốn Khổ", "img": "29.jpg"},
-    {"title": "Hoàng Tử Bé", "img": "30.jpg"},
-    {"title": "Mắt Biếc", "img": "31.jpg"},
-    {"title": "Còn Chút Gì Để Nhớ", "img": "32.jpg"},
-    {"title": "Tôi Thấy Hoa Vàng Trên Cỏ Xanh", "img": "33.jpg"},
-    {"title": "Cho Tôi Xin Một Vé Đi Tuổi Thơ", "img": "34.jpg"},
-    {"title": "Nữ Sinh", "img": "35.jpg"},
-]
-
-MUSIC_LIST = [
-    {"title": "Xúc Cảm Bộ Máy", "artist": "Cá Hồi Hoang ‧ 2023", "img": "36.jpg"},
-    {"title": "Cho tôi đi theo", "artist": "Ngọt ‧ 2016", "img": "37.jpg"},
-    {"title": "Điền vào ô trống (250)", "artist": "Cá Hồi Hoang ‧ 2018", "img": "38.jpg"},
-    {"title": "HIỆN THỰC PHŨ PHÀNG", "artist": "Phùng Khánh Linh ‧ 2025", "img": "39.jpg"},
-    {"title": "Thu Gọi", "artist": "Mạc Mai Sương ‧ 2023", "img": "40.jpg"},
-    {"title": "nhớ ( mỗi tên anh thôi )", "artist": "gia x The Odo ‧ 2020", "img": "41.jpg"},
-]
-
-# ---------------------------------------------------------
-# 4. THANH ĐIỀU HƯỚNG TRÊN CÙNG
-# ---------------------------------------------------------
-st.markdown("""
-<div class="brand-header">
-    <h1 style="margin:0; font-size: 2.3rem;">🍃 CỎ & MÂY COFFEE ☁️</h1>
-    <p style="margin:5px 0 0 0; font-style: italic;">"Cỏ giữ chân bạn lại với sự ấm áp, Mây nâng tâm hồn bạn lên với sự nhẹ nhõm."</p>
-</div>
-""", unsafe_allow_html=True)
-
-nav_tabs = st.tabs([
-    "🍹 Menu Theo Mùa", 
-    "📍 Vị Trí Quán", 
-    "📖 Về Chúng Tôi", 
-    "🛍️ Mua Ngay!", 
-    "📚 Tủ Sách Của CỎ", 
-    "🎶 Bản Nhạc Của MÂY"
-])
-
-# ---------------------------------------------------------
-# TAB 1: MENU THEO MÙA
-# ---------------------------------------------------------
-with nav_tabs[0]:
-    st.header("🍹 Menu Thức Uống Theo Mùa")
-    
-    st_xuan, st_ha, st_thu, st_dong = st.tabs(["🌸 Mùa Xuân", "☀️ Mùa Hạ", "🍂 Mùa Thu", "❄️ Mùa Đông"])
-    
-    with st_xuan:
-        cols = st.columns(3)
-        for idx, item in enumerate(SEASONS_MENU["Mùa Xuân"]):
-            with cols[idx % 3]:
-                st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-                st.image(item["img"], caption=f"{item['name']} - {item['price']:,} VNĐ", use_container_width=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-    with st_ha:
-        cols = st.columns(3)
-        for idx, item in enumerate(SEASONS_MENU["Mùa Hạ"]):
-            with cols[idx % 3]:
-                st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-                st.image(item["img"], caption=f"{item['name']} - {item['price']:,} VNĐ", use_container_width=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-    with st_thu:
-        cols = st.columns(3)
-        for idx, item in enumerate(SEASONS_MENU["Mùa Thu"]):
-            with cols[idx % 3]:
-                st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-                st.image(item["img"], caption=f"{item['name']} - {item['price']:,} VNĐ", use_container_width=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-    with st_dong:
-        cols = st.columns(3)
-        for idx, item in enumerate(SEASONS_MENU["Mùa Đông"]):
-            with cols[idx % 3]:
-                st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-                st.image(item["img"], caption=f"{item['name']} - {item['price']:,} VNĐ", use_container_width=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# TAB 2: VỊ TRÍ QUÁN
-# ---------------------------------------------------------
-with nav_tabs[1]:
-    st.header("📍 Vị Trí Quán Cỏ & Mây")
-    st.subheader("🏠 Địa chỉ: 306 Võ Văn Hát, phường Long Trường, TPHCM")
-    st.image("25.jpg", caption="Bản đồ chỉ đường tới quán Cỏ & Mây (25.jpg)", use_container_width=True)
-
-# ---------------------------------------------------------
-# TAB 3: VỀ CHÚNG TÔI
-# ---------------------------------------------------------
-with nav_tabs[2]:
-    st.header("📖 Về Chúng Tôi")
-    sub_tab1, sub_tab2 = st.tabs(["💼 Cơ Hội Nghề Nghiệp", "✨ Câu Chuyện Thương Hiệu"])
-    
-    with sub_tab1:
-        col_logo, col_text = st.columns([1, 2])
-        with col_logo:
-            st.image("26.jpg", caption="Logo CỎ & MÂY (26.jpg)", use_container_width=True)
-        with col_text:
-            st.write("""
-            **"CỎ & MÂY"** đang tìm kiếm những ứng viên có thể giao tiếp bằng hai ngôn ngữ Việt Anh, 
-            có niềm đam mê lớn trong ngành kinh doanh luôn tìm hiểu và đáp ứng nhu cầu khách hàng, 
-            yêu thích làm việc nhóm, không quản ra về muộn và đi làm sớm; những bạn trẻ hiểu được rằng 
-            sự cố gắng sẽ được tưởng thưởng xứng đáng không chỉ bằng thu nhập tốt mà còn bằng cơ hội phát triển 
-            nghề nghiệp một cách chuyên nghiệp; những ứng viên có tình yêu lớn đối với cà phê và lịch sử của nó, 
-            quan trọng hơn nữa là có tinh thần học hỏi cao và một tâm hồn rộng mở.
-            
-            Hãy đến với chúng tôi, **CỎ & MÂY** sẽ cùng bạn đi trên con đường phát triển một sự nghiệp bền vững 
-            và cho bạn thấy cách chúng tôi giao hòa giữa **Trách Nhiệm Cộng Đồng, Sự Cam Kết, và Lòng Nhiệt Thành** 
-            trong một Công ty tuyệt vời như CỎ & MÂY.
-            """)
-            st.markdown("### 📋 Các vị trí tuyển dụng gần đây:")
-            st.markdown("""
-            - ☕ Vị trí chuyên viên pha chế cà phê
-            - 👥 Vị trí Quản lý nhóm
-            - 🤝 Vị trí Trợ lý Quản lý quán
-            - 🌐 Quản lý khu vực
-            """)
-
-    with sub_tab2:
-        col_img, col_story = st.columns([1, 2])
-        with col_img:
-            st.image("27.jpg", caption="Hình ảnh thương hiệu (27.jpg)", use_container_width=True)
-        with col_story:
-            st.write("""
-            Có một định luật rất lạ của tự nhiên: **Cỏ** luôn bám chặt vào mặt đất, cần mẫn xanh tươi dẫu có bao bước chân qua; 
-            còn **Mây** lại thong thả bay lượn ở bầu trời cao, chẳng bận tâm đến ngày tháng. 
-            Cỏ đại diện cho thực tại, cho những nhọc nhằn, bận rộn và đôi chân phải chạm đất mỗi ngày. 
-            Mây đại diện cho ước mơ, cho sự tự do và những khoảng trời thả lỏng trong tâm trí.
-            
-            **CỎ & MÂY** ra đời từ một ý niệm rất đỗi mềm mại: Nơi mà bạn không cần phải chọn giữa việc *"phải cố gắng"* và *"được nghỉ ngơi"*. 
-            Bạn có thể bước vào đây với đôi giày còn dính bụi đường (như ngọn cỏ), chọn một góc ngồi thật êm, ngước nhìn ly cà phê thơm 
-            và để tâm hồn được bay bổng đôi chút (như áng mây). Cỏ giữ chân bạn lại với sự ấm áp, Mây nâng tâm hồn bạn lên với sự nhẹ nhõm.
-            """)
-
-# ---------------------------------------------------------
-# TAB 4: MUA NGAY! (ĐÃ CẬP NHẬT HIỂN THỊ ĐÁ & ĐA TOPPING)
-# ---------------------------------------------------------
-with nav_tabs[3]:
-    st.header("🛍️ Mua Ngay!")
-    col_order, col_visual = st.columns([1.2, 1.0])
-
-    with col_order:
-        st.subheader("FREESTYLE - Ly nước của bạn")
-        
-        # 1. Chọn món
-        selected_drink_name = st.selectbox("1. Chọn món nước yêu thích của bạn:", list(ALL_DRINKS.keys()))
-        drink_info = ALL_DRINKS[selected_drink_name]
-        
-        # 2. Chọn size
-        size_choice = st.radio("2. Chọn Size:", ["S (Vừa)", "M (Lớn)", "L (Đặc biệt)"], horizontal=True)
-        
-        # 3. Mức đường & 4. Mức đá
-        c_sugar, c_ice = st.columns(2)
-        with c_sugar:
-            sugar_choice = st.selectbox("3. Mức đường:", ["100%", "70%", "50%", "30%", "0%"])
-        with c_ice:
-            ice_choice = st.select_slider("4. Mức đá:", options=["0%", "30%", "50%", "100%"])
-            
-        topping_choice = st.multiselect("Topping chọn thêm:", ["Trân châu đen", "Pudding trứng", "Kem Cheese"])
-        quantity = st.number_input("5. Số lượng:", min_value=1, value=1, step=1)
-        address = st.text_input("📍 Địa điểm chọn giao hàng:", placeholder="Nhập địa chỉ giao hàng...")
-
-        # Tính toán giá tiền
-        size_extra = 0 if "S" in size_choice else (5000 if "M" in size_choice else 10000)
-        topping_extra = len(topping_choice) * 5000
-        unit_price = drink_info["price"] + size_extra + topping_extra
-        total_price = unit_price * quantity
-
-        st.markdown(f"### 💰 Tổng tiền: **{total_price:,} VNĐ**")
-
-        if st.button("💳 Bấm thanh toán bằng mã QR", type="primary", use_container_width=True):
-            if not address:
-                st.warning("Vui lòng nhập địa điểm giao hàng trước khi thanh toán!")
-            else:
-                st.success("Tạo đơn thành công! Vui lòng quét mã QR bên dưới để hoàn tất thanh toán:")
-                qr_url = f"https://img.vietqr.io/image/MB-0000000000-compact2.png?amount={total_price}&addInfo=CoAndMay_{selected_drink_name}"
-                st.image(qr_url, caption=f"Mã QR thanh toán: {total_price:,} VNĐ", width=260)
-
-    # === CỘT MÔ PHỎNG LY NƯỚC (HIỂN THỊ ĐẦY ĐỦ ĐÁ VÀ TẤT CẢ TOPPING) ===
-    with col_visual:
-        st.markdown("<h4 style='text-align:center;'>Mô phỏng Ly của bạn</h4>", unsafe_allow_html=True)
-        
-        liquid_height = HEIGHT_MAP.get(size_choice, "70%")
-        liquid_color = drink_info["color"]
-        
-        # 1. Ghép tất cả các Icon Topping được chọn
-        topping_icons = [TOPPING_ICON_MAP[t] for t in topping_choice if t in TOPPING_ICON_MAP]
-        topping_display = " ".join(topping_icons)
-        
-        # 2. Lấy Icon Đá tương ứng mức %
-        ice_display = ICE_ICON_MAP.get(ice_choice, "")
-
-        cup_html = f"""
-        <div class="boba-cup">
-            <div class="boba-ice">{ice_display}</div>
-            <div class="boba-liquid" style="height: {liquid_height}; background-color: {liquid_color};"></div>
-            <div class="boba-topping">{topping_display}</div>
-        </div>
-        <p style="text-align:center; margin-top: 15px;">
-            <b>Size {size_choice.split()[0]} | Đường {sugar_choice} | Đá {ice_choice}</b>
-        </p>
-        """
-        st.markdown(cup_html, unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# TAB 5: TỦ SÁCH CỦA CỎ
-# ---------------------------------------------------------
-with nav_tabs[4]:
-    st.header("📚 Tủ Sách Của CỎ")
-    cols_books = st.columns(4)
-    for idx, book in enumerate(BOOKS_LIST):
-        with cols_books[idx % 4]:
-            st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-            st.image(book["img"], caption=book["title"], use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-    st.markdown("""
-    <div class="footer-quote">
-        CÁC BẠN HÃY GHÉ CỎ & MÂY ĐỂ THƯỞNG THỨC NHỮNG BỘ SÁCH HAY NHÉ ^^ !
-    </div>
-    """, unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# TAB 6: BẢN NHẠC CỦA MÂY
-# ---------------------------------------------------------
-with nav_tabs[5]:
-    st.header("🎶 Bản Nhạc Của MÂY")
-    cols_music = st.columns(3)
-    for idx, song in enumerate(MUSIC_LIST):
-        with cols_music[idx % 3]:
-            st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-            st.image(song["img"], caption=f"{song['title']} \n ({song['artist']})", use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-    st.markdown("""
-    <div class="footer-quote">
-        CÁC BẠN HÃY GHÉ CỎ & MÂY ĐỂ THƯỞNG THỨC NHỮNG BẢN NHẠC HAY NHÉ ^^ !
-    </div>
-    """, unsafe_allow_html=True)
+BOOKS_
