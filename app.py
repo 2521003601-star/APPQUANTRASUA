@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 2. CUSTOM CSS GIAO DIỆN, FONT BLACK MANGO, TIÊU ĐỀ LẤP LÁNH & CHIIKAWA ANIMATION
+# 2. CUSTOM CSS GIAO DIỆN, FONT BLACK MANGO, TIÊU ĐỀ LẤP LÁNH & ANIMATION DỄ THƯƠNG
 # ---------------------------------------------------------
 st.markdown("""
 <style>
@@ -35,7 +35,7 @@ st.markdown("""
             radial-gradient(#FFFACD 15%, transparent 16%);
         background-size: 60px 60px;
         background-position: 0 0, 30px 30px, 30px 0, 0 30px;
-        padding-bottom: 90px; /* Tránh bị che bởi animation Chiikawa ở đáy màn hình */
+        padding-bottom: 90px;
     }
     
     /* Tăng cỡ chữ chung cho các thẻ tiêu đề */
@@ -51,7 +51,7 @@ st.markdown("""
         font-size: 1.8rem !important;
     }
     
-    /* Hiệu ứng Lấp lánh (Shimmer Glow) cho Tiêu đề chính */
+    /* Hiệu ứng Lấp lánh cho Tiêu đề chính */
     .sparkle-title {
         font-family: 'Black Mango', serif;
         font-size: 3.5rem;
@@ -171,53 +171,57 @@ st.markdown("""
         margin-top: 15px;
     }
 
-    /* CHIIKAWA BOTTOM WALKING ANIMATION */
-    .chiikawa-container {
+    /* ANIMATION CÁC NHÂN VẬT DỄ THƯƠNG ĐI LẠI ĐÁY MÀN HÌNH (GẤU, MÈO, MÂY, CỎ 4 LÁ) */
+    .cute-bottom-container {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 70px;
+        height: 75px;
         pointer-events: none;
         z-index: 9999;
         overflow: hidden;
     }
-    .chiikawa-walk {
+    .cute-walk-wrapper {
         position: absolute;
-        bottom: 5px;
+        bottom: 8px;
         display: flex;
-        gap: 40px;
-        animation: walkAround 18s linear infinite;
+        align-items: center;
+        gap: 35px;
+        animation: walkAcross 20s linear infinite;
     }
-    .chiikawa-char {
-        width: 55px;
-        height: 55px;
-        object-fit: contain;
-        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
-        animation: bounceChar 0.6s infinite alternate ease-in-out;
+    .cute-icon-item {
+        font-size: 42px;
+        filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.15));
+        animation: bounceFloat 0.7s infinite alternate ease-in-out;
+        user-select: none;
     }
 
-    @keyframes walkAround {
-        0% { left: -200px; transform: scaleX(1); }
+    @keyframes walkAcross {
+        0% { left: -250px; transform: scaleX(1); }
         48% { left: 100%; transform: scaleX(1); }
         50% { left: 100%; transform: scaleX(-1); }
-        98% { left: -200px; transform: scaleX(-1); }
-        100% { left: -200px; transform: scaleX(1); }
+        98% { left: -250px; transform: scaleX(-1); }
+        100% { left: -250px; transform: scaleX(1); }
     }
 
-    @keyframes bounceChar {
-        0% { transform: translateY(0px); }
-        100% { transform: translateY(-8px); }
+    @keyframes bounceFloat {
+        0% { transform: translateY(0px) rotate(-3deg); }
+        100% { transform: translateY(-10px) rotate(3deg); }
     }
 </style>
 
-<!-- Dải nhân vật Chiikawa dễ thương đi lại phía dưới màn hình -->
-<div class="chiikawa-container">
-    <div class="chiikawa-walk">
-        <img src="https://cdn-icons-png.flaticon.com/512/3081/3081162.png" class="chiikawa-char" alt="Chiikawa 1">
-        <img src="https://cdn-icons-png.flaticon.com/512/4359/4359963.png" class="chiikawa-char" alt="Chiikawa 2" style="animation-delay: 0.2s;">
-        <img src="https://cdn-icons-png.flaticon.com/512/2518/2518048.png" class="chiikawa-char" alt="Chiikawa 3" style="animation-delay: 0.4s;">
-        <img src="https://cdn-icons-png.flaticon.com/512/4807/4807695.png" class="chiikawa-char" alt="Chiikawa 4" style="animation-delay: 0.1s;">
+<!-- Dải nhân vật dễ thương (Gấu, Mèo, Mây, Cỏ 4 lá) đi lại phía dưới màn hình -->
+<div class="cute-bottom-container">
+    <div class="cute-walk-wrapper">
+        <span class="cute-icon-item" style="animation-delay: 0.0s;">🧸</span>
+        <span class="cute-icon-item" style="animation-delay: 0.2s;">🐱</span>
+        <span class="cute-icon-item" style="animation-delay: 0.4s;">☁️</span>
+        <span class="cute-icon-item" style="animation-delay: 0.1s;">🍀</span>
+        <span class="cute-icon-item" style="animation-delay: 0.3s;">🐻‍❄️</span>
+        <span class="cute-icon-item" style="animation-delay: 0.5s;">😸</span>
+        <span class="cute-icon-item" style="animation-delay: 0.2s;">☁️</span>
+        <span class="cute-icon-item" style="animation-delay: 0.4s;">🍀</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
