@@ -13,13 +13,7 @@ st.set_page_config(
 # ---------------------------------------------------------
 # 2. CSS STYLING CHUYÊN NGHIỆP & MÔ PHỎNG LY NƯỚC ĐỘNG
 # ---------------------------------------------------------
-with tab_order:
-    # ---------------------------------------------------------
-    # TRỰC QUAN HÓA LY TRÀ SỮA ĐỘNG (VISUAL CUSTOMIZER)
-    # ---------------------------------------------------------
-    col_input, col_visual = st.columns([1.2, 0.8])
-    
-    with col_input:
+ with col_input:
         tea_choice = st.selectbox("Món nước:", ["Trà Sữa Truyền Thống", "Trà Sữa Thái Xanh", "Trà Sữa Ô Long"])
         size_choice = st.radio("Size:", ["S", "M", "L"], horizontal=True)
         ice_choice = st.select_slider("Đá:", ["0%", "30%", "50%", "100%"])
