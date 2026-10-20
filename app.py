@@ -277,15 +277,16 @@ HEIGHT_MAP = {
 
 ICE_ICON_MAP = {
     "0%": "",
-    "30%": "🧊",
-    "50%": "🧊 🧊",
-    "100%": "🧊 🧊 🧊"
+    "30%": "🧊🧊 🧊🧊 🧊  ",
+    "50%": "🧊 🧊 🧊 🧊 🧊 🧊 ",
+    "70%": "🧊🧊 🧊🧊 🧊 🧊 🧊🧊 🧊 🧊",
+    "100%": "🧊 🧊🧊 🧊 🧊 🧊 🧊 🧊🧊 🧊   🧊"
 }
 
 TOPPING_ICON_MAP = {
-    "Trân châu đen": "🧋",
-    "Pudding trứng": "🍮",
-    "Kem Cheese": "🧀"
+    "Trân châu đen": "⚫⚫⚫ ⚫ ⚫  ⚫  ",
+    "Pudding trứng": "🍮🍮🍮🍮🍮",
+    "Kem Cheese": "🧀🧀🧀🧀🧀"
 }
 
 BOOKS_LIST = [
@@ -317,7 +318,7 @@ POSITIVE_MESSAGES = [
     "🍀 May mắn không ở đâu xa, nó luôn ẩn giấu trong những điều giản dị quanh bạn.",
     "🎈 Yêu thương bản thân chính là khởi đầu cho một hành trình hạnh phúc trọn vẹn.",
     "☕ Hãy nhấp một ngụm trà thơm và nhớ rằng: Cuộc đời luôn có những vị ngọt bất ngờ!",
-    "🌈 Sau cơn mưa trời lại sáng, cầu phồng hạnh phúc sẽ luôn chờ đón bạn phía trước.",
+    "🌈 Sau cơn mưa trời lại sáng, cầu ồng hạnh phúc sẽ luôn chờ đón bạn phía trước.",
     "✨ Cố gắng mỗi ngày một chút, bạn đang tiệm cận đến phiên bản tuyệt vời nhất!"
 ]
 
