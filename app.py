@@ -306,7 +306,7 @@ MUSIC_LIST = [
     {"title": "Điền vào ô trống (250)", "artist": "Cá Hồi Hoang ‧ 2018", "img": "38.jpg"},
     {"title": "HIỆN THỰC PHŨ PHÀNG", "artist": "Phùng Khánh Linh ‧ 2025", "img": "39.jpg"},
     {"title": "Thu Gọi", "artist": "Mạc Mai Sương ‧ 2023", "img": "40.jpg"},
-    {"title": "nhớ ( mỗi tên anh thôi )", "artist": "gia x The Odo ‧ 2020", "img": "40.jpg"},
+    {"title": "nhớ ( mỗi tên anh thôi )", "artist": "gia x The Odo ‧ 2020", "img": "41.jpg"},
 ]
 
 POSITIVE_MESSAGES = [
@@ -318,7 +318,7 @@ POSITIVE_MESSAGES = [
     "🍀 May mắn không ở đâu xa, nó luôn ẩn giấu trong những điều giản dị quanh bạn.",
     "🎈 Yêu thương bản thân chính là khởi đầu cho một hành trình hạnh phúc trọn vẹn.",
     "☕ Hãy nhấp một ngụm trà thơm và nhớ rằng: Cuộc đời luôn có những vị ngọt bất ngờ!",
-    "🌈 Sau cơn mưa trời lại sáng, cầu ồng hạnh phúc sẽ luôn chờ đón bạn phía trước.",
+    "🌈 Sau cơn mưa trời lại sáng, cầu vồng hạnh phúc sẽ luôn chờ đón bạn phía trước.",
     "✨ Cố gắng mỗi ngày một chút, bạn đang tiệm cận đến phiên bản tuyệt vời nhất!"
 ]
 
