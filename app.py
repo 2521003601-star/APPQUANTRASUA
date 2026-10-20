@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 2. CUSTOM CSS GIAO DIỆN & MÔ PHỎNG LY NƯỚC TỪ CODE 1
+# 2. CUSTOM CSS GIAO DIỆN & MÔ PHỎNG LY NƯỚC (TỪ CODE 1)
 # ---------------------------------------------------------
 st.markdown("""
 <style>
@@ -46,7 +46,7 @@ st.markdown("""
         margin-bottom: 20px;
     }
 
-    /* Hiển thị ly nước mô phỏng kiểu Oatside (Đoạn Code 1) */
+    /* Hiển thị ly nước mô phỏng kiểu Oatside (Code 1) */
     .boba-cup {
         width: 130px;
         height: 190px;
@@ -125,57 +125,5 @@ SEASONS_MENU = {
     ]
 }
 
-ALL_DRINKS = {item["name"]: item for season in SEASONS_MENU.values() for item in season}
-
-# Bảng quy đổi chiều cao mực nước theo Size từ Code 1
-HEIGHT_MAP = {
-    "S (Vừa)": "50%",
-    "M (Lớn)": "75%",
-    "L (Đặc biệt)": "95%"
-}
-
-BOOKS_LIST = [
-    {"title": "Kiêu Hãnh và Định Kiến", "img": "28.jpg"},
-    {"title": "Những Người Khốn Khổ", "img": "29.jpg"},
-    {"title": "Hoàng Tử Bé", "img": "30.jpg"},
-    {"title": "Mắt Biếc", "img": "31.jpg"},
-    {"title": "Còn Chút Gì Để Nhớ", "img": "32.jpg"},
-    {"title": "Tôi Thấy Hoa Vàng Trên Cỏ Xanh", "img": "33.jpg"},
-    {"title": "Cho Tôi Xin Một Vé Đi Tuổi Thơ", "img": "34.jpg"},
-    {"title": "Nữ Sinh", "img": "35.jpg"},
-]
-
-MUSIC_LIST = [
-    {"title": "Xúc Cảm Bộ Máy", "artist": "Cá Hồi Hoang ‧ 2023", "img": "36.jpg"},
-    {"title": "Cho tôi đi theo", "artist": "Ngọt ‧ 2016", "img": "37.jpg"},
-    {"title": "Điền vào ô trống (250)", "artist": "Cá Hồi Hoang ‧ 2018", "img": "38.jpg"},
-    {"title": "HIỆN THỰC PHŨ PHÀNG", "artist": "Phùng Khánh Linh ‧ 2025", "img": "39.jpg"},
-    {"title": "Thu Gọi", "artist": "Mạc Mai Sương ‧ 2023", "img": "40.jpg"},
-    {"title": "nhớ ( mỗi tên anh thôi )", "artist": "gia x The Odo ‧ 2020", "img": "40.jpg"},
-]
-
-# ---------------------------------------------------------
-# 4. THANH ĐIỀU HƯỚNG TRÊN CÙNG
-# ---------------------------------------------------------
-st.markdown("""
-<div class="brand-header">
-    <h1 style="margin:0; font-size: 2.3rem;">🍃 CỎ & MÂY COFFEE ☁️</h1>
-    <p style="margin:5px 0 0 0; font-style: italic;">"Cỏ giữ chân bạn lại với sự ấm áp, Mây nâng tâm hồn bạn lên với sự nhẹ nhõm."</p>
-</div>
-""", unsafe_allow_html=True)
-
-nav_tabs = st.tabs([
-    "🍹 Menu Theo Mùa", 
-    "📍 Vị Trí Quán", 
-    "📖 Về Chúng Tôi", 
-    "🛍️ Mua Ngay!", 
-    "📚 Tủ Sách Của CỎ", 
-    "🎶 Bản Nhạc Của MÂY"
-])
-
-# ---------------------------------------------------------
-# TAB 1: MENU THEO MÙA
-# ---------------------------------------------------------
-with nav_tabs[0]:
-    st.header("🍹 Menu Thức Uống Theo Mùa")
-    season_tabs =
+ALL_DRINKS = {}
+for
