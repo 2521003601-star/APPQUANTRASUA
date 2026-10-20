@@ -1,19 +1,112 @@
 import streamlit as st
 import pandas as pd
+import random
+
+# Cấu hình trang
+st.set_page_config(page_title="Chiikawa Boba - OATSIDE Style", page_icon="🧋", layout="wide")
 
 # ---------------------------------------------------------
-# 1. CẤU HÌNH TRANG STREAMLIT
+# OATSIDE BRANDING - CUSTOM CSS & ANIMATIONS
 # ---------------------------------------------------------
-st.set_page_config(
-    page_title="CỎ & MÂY Coffee",
-    page_icon="☁️",
-    layout="wide"
-)
+st.markdown("""
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Fredoka', cursive, sans-serif;
+    }
+    .stApp {
+        background-color: #FFF8EE;
+    }
+    /* Card kiểu Oatside */
+    .oatside-card {
+        background: #FFFFFF;
+        border: 3px solid #1A1A1A;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 5px 5px 0px #1A1A1A;
+        margin-bottom: 20px;
+        transition: transform 0.2s;
+    }
+    .oatside-card:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 7px 7px 0px #1A1A1A;
+    }
+    /* Hiển thị ly nước mô phỏng */
+    .boba-cup {
+        width: 120px;
+        height: 180px;
+        border: 4px solid #1A1A1A;
+        border-radius: 0 0 25px 25px;
+        margin: auto;
+        position: relative;
+        overflow: hidden;
+        background: #FFF;
+    }
+    .boba-liquid {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: #E6C280;
+        transition: height 0.3s ease;
+    }
+    .boba-topping {
+        position: absolute;
+        bottom: 5px;
+        width: 100%;
+        text-align: center;
+        font-size: 18px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 2. CSS STYLING CHUYÊN NGHIỆP & MÔ PHỎNG LY NƯỚC ĐỘNG
+# TAB 1: FLAVOR FINDER (TÌM MÓN THEO TÂM TRẠNG - KIỂU OATSIDE)
 # ---------------------------------------------------------
- with col_input:
+st.title("🧋 CHIIKAWA BOBA WORLD")
+st.caption("Trải nghiệm Order Trà Sữa Phong Cách OATSIDE!")
+
+tab_order, tab_mood, tab_secret = st.tabs(["🛒 Order Nhanh", "🎯 Gợi Ý Theo Tâm Trạng", "🎲 Món Quà Bất Ngờ"])
+
+with tab_mood:
+    st.markdown("### 🎭 Hôm nay năng lượng của bạn thế nào?")
+    
+    col_q1, col_q2 = st.columns(2)
+    with col_q1:
+        mood = st.radio("1. Bạn đang cảm thấy...", ["Cực kỳ năng động ⚡", "Cần chạy deadline 💻", "Hơi suy / Buồn xỉu ☁️", "Thèm ngọt đỉnh điểm 🍩"])
+    with col_q2:
+        sweet_pref = st.select_slider("2. Mức độ thèm ngọt:", options=["Nhẹ nhàng", "Vừa đủ", "Đậm đà", "Bùng nổ"])
+
+    if st.button("✨ Tìm Ly Trà Sữa Chân Truyền", type="primary"):
+        st.markdown("<div class='oatside-card'>", unsafe_allow_html=True)
+        if "Cực kỳ năng động" in mood:
+            st.subheader("🎉 Món gợi ý: Trà Đào Cam Sả Hachiware!")
+            st.write("Sảng khoái, tươi mát, giúp bạn duy trì 200% năng lượng quậy phá cả ngày.")
+        elif "deadline" in mood:
+            st.subheader("⚡ Món gợi ý: Trà Sữa Ô Long Kem Cheese!")
+            st.write("Vị trà đậm đà tỉnh táo kết hợp lớp kem béo ngậy nạp lại năng lượng trí não.")
+        else:
+            st.subheader("🧋 Món gợi ý: Trà Sữa Trân Châu Đường Đen Usagi!")
+            st.write("Ngọt ngào êm dịu xoa dịu mọi nỗi buồn.")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+with tab_secret:
+    st.markdown("### 🎲 Không biết uống gì? Để Usagi chọn giúp!")
+    if st.button("🎰 Quay Số Chọn Món Ngẫu Nhiên"):
+        drinks = ["Trà Sữa Truyền Thống", "Trà Sữa Thái Xanh", "Trà Sữa Matcha", "Trà Dâu Tằm"]
+        toppings = ["Trân châu đen", "Pudding trứng", "Kem Cheese"]
+        chosen_drink = random.choice(drinks)
+        chosen_topping = random.choice(toppings)
+        
+        st.success(f"🎯 Usagi gợi ý cho bạn: **{chosen_drink}** kèm **{chosen_topping}**!")
+
+with tab_order:
+    # ---------------------------------------------------------
+    # TRỰC QUAN HÓA LY TRÀ SỮA ĐỘNG (VISUAL CUSTOMIZER)
+    # ---------------------------------------------------------
+    col_input, col_visual = st.columns([1.2, 0.8])
+    
+    with col_input:
         tea_choice = st.selectbox("Món nước:", ["Trà Sữa Truyền Thống", "Trà Sữa Thái Xanh", "Trà Sữa Ô Long"])
         size_choice = st.radio("Size:", ["S", "M", "L"], horizontal=True)
         ice_choice = st.select_slider("Đá:", ["0%", "30%", "50%", "100%"])
@@ -42,317 +135,3 @@ st.set_page_config(
         </div>
         <p style="text-align:center; margin-top: 10px;"><b>Size {size_choice} | {ice_choice} Đá</b></p>
         """, unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# 3. DỮ LIỆU SẢN PHẨM & CẤU HÌNH CÁC MỤC
-# ---------------------------------------------------------
-SEASONS_MENU = {
-    "🌸 Mùa Xuân": [
-        {"name": "Trà Đào Cam Sả", "img": "1.jpg", "color": "#FF9F43", "price": 45000},
-        {"name": "Trà Dâu Tằm", "img": "2.jpg", "color": "#EE5253", "price": 42000},
-        {"name": "Cold Brew Cam Quế", "img": "3.jpg", "color": "#D35400", "price": 50000},
-        {"name": "Trà Ô Long Quế Hoa Xoài", "img": "4.jpg", "color": "#F1C40F", "price": 48000},
-        {"name": "Matcha Latte", "img": "5.jpg", "color": "#1DD1A1", "price": 48000},
-        {"name": "Dâu crunchy đá xay", "img": "6.jpg", "color": "#FF6B6B", "price": 55000},
-    ],
-    "☀️ Mùa Hạ": [
-        {"name": "Trà Thạch Đào", "img": "7.jpg", "color": "#FF7851", "price": 42000},
-        {"name": "Trà Ổi Hồng", "img": "8.jpg", "color": "#FF6B81", "price": 45000},
-        {"name": "Trà Măng Cụt", "img": "9.jpg", "color": "#A55EEA", "price": 48000},
-        {"name": "Cà Phê Muối Biển", "img": "10.jpg", "color": "#70A1FF", "price": 38000},
-        {"name": "Đá Xay Bạc Hà", "img": "11.jpg", "color": "#00D2D3", "price": 52000},
-        {"name": "Trà Nhãn Lài", "img": "12.jpg", "color": "#FECA57", "price": 42000},
-    ],
-    "🍂 Mùa Thu": [
-        {"name": "Cold Brew kem muối caramel", "img": "13.jpg", "color": "#E1B12C", "price": 52000},
-        {"name": "Cà Phê Đường Đen Gừng", "img": "14.jpg", "color": "#8C7AE6", "price": 42000},
-        {"name": "Cà Phê Latte Hạnh Nhân Nướng", "img": "15.jpg", "color": "#CD84F1", "price": 48000},
-        {"name": "Trà Sữa Chôm Chôm Nướng", "img": "16.jpg", "color": "#FFB8B8", "price": 45000},
-        {"name": "Oolong Tứ Quý Sữa", "img": "17.jpg", "color": "#C8D6E5", "price": 45000},
-        {"name": "Trà Long Nhãn Hạt Sen", "img": "18.jpg", "color": "#FFDA79", "price": 48000},
-    ],
-    "❄️ Mùa Đông": [
-        {"name": "Latte gừng", "img": "19.jpg", "color": "#D35400", "price": 45000},
-        {"name": "Trà Thạch Đào Nóng", "img": "20.jpg", "color": "#E67E22", "price": 42000},
-        {"name": "Trà Gừng Mật Ong Thảo Mộc", "img": "21.jpg", "color": "#F39C12", "price": 40000},
-        {"name": "Cà phê socola bạc hà", "img": "22.jpg", "color": "#2C3E50", "price": 48000},
-        {"name": "Cà phê trứng Hà Nội", "img": "23.jpg", "color": "#F1C40F", "price": 45000},
-        {"name": "Trà sữa khoai môn mochi dẻo", "img": "24.jpg", "color": "#9B59B6", "price": 50000},
-    ]
-}
-
-# Tạo danh sách phẳng tất cả các món nước để dùng trong Order
-ALL_DRINKS = {}
-for season, drinks in SEASONS_MENU.items():
-    for item in drinks:
-        ALL_DRINKS[item["name"]] = item
-
-SIZE_OPTIONS = {
-    "S (Vừa)": {"price": 0, "height": "160px", "width": "110px", "fill": "70%"},
-    "M (Lớn)": {"price": 5000, "height": "190px", "width": "125px", "fill": "82%"},
-    "L (Đặc biệt)": {"price": 10000, "height": "220px", "width": "135px", "fill": "92%"}
-}
-
-SUGAR_LEVELS = {
-    "100% (Bình thường)": {"opacity": "1.0", "label": "100% Đường"},
-    "70%": {"opacity": "0.88", "label": "70% Đường"},
-    "50%": {"opacity": "0.75", "label": "50% Đường"},
-    "30%": {"opacity": "0.62", "label": "30% Đường"},
-    "0% (Không đường)": {"opacity": "0.45", "label": "0% Đường"}
-}
-
-ICE_LEVELS = {
-    "100% (Bình thường)": {"cubes": "🧊 🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊 🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊", "label": "100% Đá"},
-    "70%": {"cubes": "🧊 🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊", "label": "70% Đá"},
-    "50%": {"cubes": "🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊 🧊", "label": "50% Đá"},
-    "30%": {"cubes": "🧊🧊🧊🧊🧊🧊🧊🧊🧊🧊", "label": "30% Đá"},
-    "0% (Không đá)": {"cubes": "", "label": "0% Đá"}
-}
-
-TOPPING_OPTIONS = {
-    "Trân châu đen": {"price": 5000, "icon": "⚫⚫⚫"},
-    "Trân châu trắng": {"price": 7000, "icon": "⚪⚪⚪"},
-    "Thạch trái cây": {"price": 5000, "icon": "🟩🟨🟥"},
-    "Pudding trứng": {"price": 8000, "icon": "🍮🍮🍮🍮🍮"},
-    "Kem Cheese": {"price": 10000, "icon": "🧀🧀🧀🧀🧀"}
-}
-
-BOOKS_LIST = [
-    {"title": "Kiêu Hãnh và Định Kiến", "img": "28.jpg"},
-    {"title": "Những Người Khốn Khổ", "img": "29.jpg"},
-    {"title": "Hoàng Tử Bé", "img": "30.jpg"},
-    {"title": "Mắt Biếc", "img": "31.jpg"},
-    {"title": "Còn Chút Gì Để Nhớ", "img": "32.jpg"},
-    {"title": "Tôi Thấy Hoa Vàng Trên Cỏ Xanh", "img": "33.jpg"},
-    {"title": "Cho Tôi Xin Một Vé Đi Tuổi Thơ", "img": "34.jpg"},
-    {"title": "Nữ Sinh", "img": "35.jpg"},
-]
-
-MUSIC_LIST = [
-    {"title": "Xúc Cảm Bộ Máy", "artist": "Cá Hồi Hoang ‧ 2023", "img": "36.jpg"},
-    {"title": "Cho tôi đi theo", "artist": "Ngọt ‧ 2016", "img": "37.jpg"},
-    {"title": "Điền vào ô trống (250)", "artist": "Cá Hồi Hoang ‧ 2018", "img": "38.jpg"},
-    {"title": "HIỆN THỰC PHŨ PHÀNG", "artist": "Phùng Khánh Linh ‧ 2025", "img": "39.jpg"},
-    {"title": "Thu Gọi", "artist": "Mạc Mai Sương ‧ 2023", "img": "40.jpg"},
-    {"title": "nhớ ( mỗi tên anh thôi )", "artist": "gia x The Odo ‧ 2020", "img": "41.jpg"},
-]
-
-# ---------------------------------------------------------
-# 4. THANH ĐIỀU HƯỚNG TRÊN CÙNG (NAVIGATION BAR)
-# ---------------------------------------------------------
-st.markdown("""
-<div class="brand-header">
-    <h1 style="margin:0; font-size: 2.5rem;">🍃 CỎ & MÂY COFFEE ☁️</h1>
-    <p style="margin:5px 0 0 0; font-style: italic;">"Cỏ bám chặt đất ấm - Mây tự do trời cao"</p>
-</div>
-""", unsafe_allow_html=True)
-
-nav_tabs = st.tabs([
-    "🍹 Menu Theo Mùa", 
-    "📍 Vị Trí Quán", 
-    "📖 Về Chúng Tôi", 
-    "🛍️ Mua Ngay!", 
-    "📚 Tủ Sách Của CỎ", 
-    "🎶 Bản Nhạc Của MÂY"
-])
-
-# ---------------------------------------------------------
-# TAB 1: MENU THEO MÙA
-# ---------------------------------------------------------
-with nav_tabs[0]:
-    st.header("🍹 Menu Thức Uống Theo Mùa")
-    season_tab1, season_tab2, season_tab3, season_tab4 = st.tabs(list(SEASONS_MENU.keys()))
-    
-    season_tabs_map = {
-        "🌸 Mùa Xuân": season_tab1,
-        "☀️ Mùa Hạ": season_tab2,
-        "🍂 Mùa Thu": season_tab3,
-        "❄️ Mùa Đông": season_tab4
-    }
-
-    for season_name, tab_object in season_tabs_map.items():
-        with tab_object:
-            items = SEASONS_MENU[season_name]
-            cols = st.columns(3)
-            for idx, item in enumerate(items):
-                with cols[idx % 3]:
-                    st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-                    # Sử dụng file ảnh theo số thứ tự đã quy định
-                    st.image(item["img"], caption=f"{item['name']} - {item['price']:,} VNĐ", use_container_width=True)
-                    st.markdown("</div>", unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# TAB 2: VỊ TRÍ QUÁN
-# ---------------------------------------------------------
-with nav_tabs[1]:
-    st.header("📍 Vị Trí Quán Cỏ & Mây")
-    st.subheader("306 Võ Văn Hát, phường Long Trường, TPHCM")
-    st.image("25.jpg", caption="Bản đồ chỉ đường đến quán Cỏ & Mây (File: 25.jpg)", use_container_width=True)
-
-# ---------------------------------------------------------
-# TAB 3: VỀ CHÚNG TÔI
-# ---------------------------------------------------------
-with nav_tabs[2]:
-    st.header("📖 Về Chúng Tôi")
-    sub_tab1, sub_tab2 = st.tabs(["💼 Cơ Hội Nghề Nghiệp", "✨ Câu Chuyện Thương Hiệu"])
-    
-    with sub_tab1:
-        col_logo, col_text = st.columns([1, 2])
-        with col_logo:
-            st.image("26.jpg", caption="Logo CỎ & MÂY", use_container_width=True)
-        with col_text:
-            st.write("""
-            **"CỎ & MÂY"** đang tìm kiếm những ứng viên có thể giao tiếp bằng hai ngôn ngữ Việt Anh, 
-            có niềm đam mê lớn trong ngành kinh doanh luôn tìm hiểu và đáp ứng nhu cầu khách hàng, 
-            yêu thích làm việc nhóm, không quản ra về muộn và đi làm sớm; những bạn trẻ hiểu được rằng 
-            sự cố gắng sẽ được tưởng thưởng xứng đáng không chỉ bằng thu nhập tốt mà còn bằng cơ hội phát triển 
-            nghề nghiệp một cách chuyên nghiệp; những ứng viên có tình yêu lớn đối với cà phê và lịch sử của nó, 
-            quan trọng hơn nữa là có tinh thần học hỏi cao và một tâm hồn rộng mở.
-            
-            Hãy đến với chúng tôi, **CỎ & MÂY** sẽ cùng bạn đi trên con đường phát triển một sự nghiệp bền vững 
-            và cho bạn thấy cách chúng tôi giao hòa giữa **Trách Nhiệm Cộng Đồng, Sự Cam Kết, và Lòng Nhiệt Thành** 
-            trong một Công ty tuyệt vời như CỎ & MÂY.
-            """)
-            st.markdown("### 📋 Các vị trí tuyển dụng gần đây:")
-            st.markdown("""
-            - ☕ Vị trí chuyên viên pha chế cà phê
-            - 👥 Vị trí Quản lý nhóm
-            - 🤝 Vị trí Trợ lý Quản lý quán
-            - 🌐 Quản lý khu vực
-            """)
-
-    with sub_tab2:
-        col_img, col_story = st.columns([1, 2])
-        with col_img:
-            st.image("27.jpg", caption="Cỏ & Mây - Ý niệm kết nối", use_container_width=True)
-        with col_story:
-            st.write("""
-            Có một định luật rất lạ của tự nhiên: **Cỏ** luôn bám chặt vào mặt đất, cần mẫn xanh tươi dẫu có bao bước chân qua; 
-            còn **Mây** lại thong thả bay lượn ở bầu trời cao, chẳng bận tâm đến ngày tháng. 
-            Cỏ đại diện cho thực tại, cho những nhọc nhằn, bận rộn và đôi chân phải chạm đất mỗi ngày. 
-            Mây đại diện cho ước mơ, cho sự tự do và những khoảng trời thả lỏng trong tâm trí.
-            
-            **CỎ & MÂY** ra đời từ một ý niệm rất đỗi mềm mại: Nơi mà bạn không cần phải chọn giữa việc *"phải cố gắng"* và *"được nghỉ ngơi"*. 
-            Bạn có thể bước vào đây với đôi giày còn dính bụi đường (như ngọn cỏ), chọn một góc ngồi thật êm, ngước nhìn ly cà phê thơm 
-            và để tâm hồn được bay bổng đôi chút (như áng mây). Cỏ giữ chân bạn lại với sự ấm áp, Mây nâng tâm hồn bạn lên với sự nhẹ nhõm.
-            """)
-
-# ---------------------------------------------------------
-# TAB 4: MUA NGAY! (ORDER NƯỚC & TÙY CHỈNH MÔ PHỎNG LY NƯỚC)
-# ---------------------------------------------------------
-with nav_tabs[3]:
-    st.header("🛍️ Đặt Hàng Trực Tuyến")
-    col_order, col_visual = st.columns([1.2, 1.0])
-
-    with col_order:
-        st.subheader("FREESTYLE - Ly nước của bạn")
-        
-        # 1. Chọn món
-        selected_drink_name = st.selectbox("1. Chọn món nước yêu thích:", list(ALL_DRINKS.keys()))
-        drink_info = ALL_DRINKS[selected_drink_name]
-        
-        # 2. Chọn Size
-        selected_size = st.selectbox("2. Chọn Size:", list(SIZE_OPTIONS.keys()))
-        
-        # 3. Mức đường & 4. Mức đá
-        c_sugar, c_ice = st.columns(2)
-        with c_sugar:
-            selected_sugar = st.selectbox("3. Mức đường:", list(SUGAR_LEVELS.keys()))
-        with c_ice:
-            selected_ice = st.selectbox("4. Mức đá:", list(ICE_LEVELS.keys()))
-            
-        selected_toppings = st.multiselect("Topping bổ sung:", list(TOPPING_OPTIONS.keys()))
-        
-        # 5. Số lượng
-        quantity = st.number_input("5. Số lượng:", min_value=1, value=1, step=1)
-        
-        # Địa điểm giao hàng
-        address = st.text_input("📍 Địa điểm chọn giao hàng:", placeholder="Nhập địa chỉ nhận hàng...")
-
-        # Tính toán giá tiền
-        base_price = drink_info["price"]
-        size_price = SIZE_OPTIONS[selected_size]["price"]
-        topping_price = sum(TOPPING_OPTIONS[t]["price"] for t in selected_toppings)
-        unit_price = base_price + size_price + topping_price
-        total_price = unit_price * quantity
-
-        st.markdown(f"### 💰 Tổng tiền: **{total_price:,} VNĐ**")
-
-        # Nút bấm thanh toán bằng QR
-        if st.button("💳 Thanh toán bằng mã QR", type="primary", use_container_width=True):
-            if not address:
-                st.warning("Vui lòng nhập địa điểm giao hàng trước khi thanh toán!")
-            else:
-                st.success("Tạo đơn hàng thành công! Quét mã QR bên dưới để thanh toán:")
-                qr_url = f"https://img.vietqr.io/image/MB-0000000000-compact2.png?amount={total_price}&addInfo=CoAndMay_{selected_drink_name}"
-                st.image(qr_url, caption=f"Mã QR thanh toán đơn hàng {total_price:,} VNĐ", width=250)
-
-    # CỘT MÔ PHỎNG VISUALIZER DẠNG CSS
-    with col_visual:
-        st.subheader("🎨 Mô phỏng trực quan ly nước")
-        
-        cup_h = SIZE_OPTIONS[selected_size]["height"]
-        cup_w = SIZE_OPTIONS[selected_size]["width"]
-        fill_h = SIZE_OPTIONS[selected_size]["fill"]
-        drink_color = drink_info["color"]
-        sugar_op = SUGAR_LEVELS[selected_sugar]["opacity"]
-        ice_cubes = ICE_LEVELS[selected_ice]["cubes"]
-        
-        has_cheese = "Kem Cheese" in selected_toppings
-        bottom_toppings = [TOPPING_OPTIONS[t]["icon"] for t in selected_toppings if t != "Kem Cheese"]
-        topping_html = " ".join(bottom_toppings) if bottom_toppings else ""
-        cheese_html = '<div class="cheese-foam"></div>' if has_cheese else ''
-
-        st.markdown(f"""
-        <div class="visualizer-container">
-            <div class="boba-cup" style="height: {cup_h}; width: {cup_w};">
-                <div class="straw"></div>
-                {ice_cubes and f'<div class="ice-cubes">{ice_cubes}</div>'}
-                <div class="boba-liquid" style="height: {fill_h}; background-color: {drink_color}; opacity: {sugar_op};">
-                    {cheese_html}
-                </div>
-                <div class="topping-layer">{topping_html}</div>
-            </div>
-            <div style="margin-top: 25px; text-align: center;">
-                <span class="spec-tag">Size {selected_size.split()[0]}</span>
-                <span class="spec-tag">{SUGAR_LEVELS[selected_sugar]['label']}</span>
-                <span class="spec-tag">{ICE_LEVELS[selected_ice]['label']}</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# TAB 5: TỦ SÁCH CỦA CỎ
-# ---------------------------------------------------------
-with nav_tabs[4]:
-    st.header("📚 Tủ Sách Của CỎ")
-    cols_books = st.columns(4)
-    for idx, book in enumerate(BOOKS_LIST):
-        with cols_books[idx % 4]:
-            st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-            st.image(book["img"], caption=book["title"], use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-    st.markdown("""
-    <div class="footer-quote">
-        CÁC BẠN HÃY GHÉ CỎ & MÂY ĐỂ THƯỞNG THỨC NHỮNG BỘ SÁCH HAY NHÉ ^^ !
-    </div>
-    """, unsafe_allow_html=True)
-
-# ---------------------------------------------------------
-# TAB 6: BẢN NHẠC CỦA MÂY
-# ---------------------------------------------------------
-with nav_tabs[5]:
-    st.header("🎶 Bản Nhạc Của MÂY")
-    cols_music = st.columns(3)
-    for idx, song in enumerate(MUSIC_LIST):
-        with cols_music[idx % 3]:
-            st.markdown("<div class='menu-card'>", unsafe_allow_html=True)
-            st.image(song["img"], caption=f"{song['title']} \n ({song['artist']})", use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
-            
-    st.markdown("""
-    <div class="footer-quote">
-        CÁC BẠN HÃY GHÉ CỎ & MÂY ĐỂ THƯỞNG THỨC NHỮNG BẢN NHẠC HAY NHÉ ^^ !
-    </div>
-    """, unsafe_allow_html=True)
