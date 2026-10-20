@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # ---------------------------------------------------------
-# 1. CẤU HÌNH TRANG STREAMLIT (BẮT BUỘC Ở ĐẦU FILE)
+# 1. CẤU HÌNH TRANG STREAMLIT
 # ---------------------------------------------------------
 st.set_page_config(
     page_title="CỎ & MÂY Coffee",
@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 2. CUSTOM CSS GIAO DIỆN & BỘ MÔ PHỎNG LY NƯỚC ĐỘNG
+# 2. CUSTOM CSS GIAO DIỆN & BỘ MÔ PHỎNG LY NƯỚC
 # ---------------------------------------------------------
 st.markdown("""
 <style>
@@ -35,7 +35,7 @@ st.markdown("""
         box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     }
     
-    /* Card Sản phẩm, Sách, Nhạc */
+    /* Card Sản phẩm */
     .menu-card {
         background: #FFFFFF;
         border-radius: 15px;
@@ -67,7 +67,7 @@ st.markdown("""
         border-radius: 0 0 35px 35px;
         position: relative;
         overflow: hidden;
-        background: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.6);
         box-shadow: inset 0 0 12px rgba(0,0,0,0.08);
         transition: all 0.3s ease;
         margin: 0 auto;
@@ -122,7 +122,7 @@ st.markdown("""
     /* Viên Đá */
     .ice-cubes {
         position: absolute;
-        top: 30px;
+        top: 25px;
         width: 100%;
         text-align: center;
         font-size: 16px;
@@ -143,7 +143,6 @@ st.markdown("""
         font-size: 0.85rem;
     }
     
-    /* Khung ghi chú footer */
     .footer-quote {
         text-align: center;
         font-size: 1.1rem;
@@ -159,7 +158,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 3. KHO DỮ LIỆU CÁC MỤC (MENU, SÁCH, NHẠC)
+# 3. KHO DỮ LIỆU
 # ---------------------------------------------------------
 SEASONS_MENU = {
     "🌸 Mùa Xuân": [
@@ -196,11 +195,7 @@ SEASONS_MENU = {
     ]
 }
 
-# Tổng hợp tất cả các món nước để chọn trong màn Order
-ALL_DRINKS = {}
-for season, drinks in SEASONS_MENU.items():
-    for item in drinks:
-        ALL_DRINKS[item["name"]] = item
+ALL_DRINKS = {item["name"]: item for season in SEASONS_MENU.values() for item in season}
 
 SIZE_OPTIONS = {
     "S (Vừa)": {"price": 0, "height": "160px", "width": "110px", "fill": "70%"},
@@ -272,22 +267,14 @@ nav_tabs = st.tabs([
 ])
 
 # ---------------------------------------------------------
-# TAB 1: MENU THEO MÙA (1 -> 24.jpg)
+# TAB 1: MENU THEO MÙA
 # ---------------------------------------------------------
 with nav_tabs[0]:
     st.header("🍹 Menu Thức Uống Theo Mùa")
-    season_tab1, season_tab2, season_tab3, season_tab4 = st.tabs(list(SEASONS_MENU.keys()))
+    season_tabs = st.tabs(list(SEASONS_MENU.keys()))
     
-    season_map = {
-        "🌸 Mùa Xuân": season_tab1,
-        "☀️ Mùa Hạ": season_tab2,
-        "🍂 Mùa Thu": season_tab3,
-        "❄️ Mùa Đông": season_tab4
-    }
-
-    for s_name, tab_obj in season_map.items():
+    for (s_name, items), tab_obj in zip(SEASONS_MENU.items(), season_tabs):
         with tab_obj:
-            items = SEASONS_MENU[s_name]
             cols = st.columns(3)
             for idx, item in enumerate(items):
                 with cols[idx % 3]:
@@ -296,15 +283,15 @@ with nav_tabs[0]:
                     st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 2: VỊ TRÍ QUÁN (25.jpg)
+# TAB 2: VỊ TRÍ QUÁN
 # ---------------------------------------------------------
 with nav_tabs[1]:
     st.header("📍 Vị Trí Quán Cỏ & Mây")
     st.subheader("🏠 Địa chỉ: 306 Võ Văn Hát, phường Long Trường, TPHCM")
-    st.image("25.jpg", caption="Bản đồ chỉ đường tới quán Cỏ & Mây (File ảnh: 25.jpg)", use_container_width=True)
+    st.image("25.jpg", caption="Bản đồ chỉ đường tới quán Cỏ & Mây (25.jpg)", use_container_width=True)
 
 # ---------------------------------------------------------
-# TAB 3: VỀ CHÚNG TÔI (26.jpg & 27.jpg)
+# TAB 3: VỀ CHÚNG TÔI
 # ---------------------------------------------------------
 with nav_tabs[2]:
     st.header("📖 Về Chúng Tôi")
@@ -313,7 +300,7 @@ with nav_tabs[2]:
     with sub_tab1:
         col_logo, col_text = st.columns([1, 2])
         with col_logo:
-            st.image("26.jpg", caption="Logo CỎ & MÂY (File ảnh: 26.jpg)", use_container_width=True)
+            st.image("26.jpg", caption="Logo CỎ & MÂY (26.jpg)", use_container_width=True)
         with col_text:
             st.write("""
             **"CỎ & MÂY"** đang tìm kiếm những ứng viên có thể giao tiếp bằng hai ngôn ngữ Việt Anh, 
@@ -338,7 +325,7 @@ with nav_tabs[2]:
     with sub_tab2:
         col_img, col_story = st.columns([1, 2])
         with col_img:
-            st.image("27.jpg", caption="Hình ảnh thương hiệu Cỏ & Mây (File ảnh: 27.jpg)", use_container_width=True)
+            st.image("27.jpg", caption="Hình ảnh thương hiệu (27.jpg)", use_container_width=True)
         with col_story:
             st.write("""
             Có một định luật rất lạ của tự nhiên: **Cỏ** luôn bám chặt vào mặt đất, cần mẫn xanh tươi dẫu có bao bước chân qua; 
@@ -352,24 +339,20 @@ with nav_tabs[2]:
             """)
 
 # ---------------------------------------------------------
-# TAB 4: MUA NGAY! (CỘT ORDER & CỘT MÔ PHỎNG VISUALIZER)
+# TAB 4: MUA NGAY! (ĐÃ SỬA LỖI MÔ PHỎNG LY NƯỚC HTML/CSS)
 # ---------------------------------------------------------
 with nav_tabs[3]:
     st.header("🛍️ Mua Ngay!")
     col_order, col_visual = st.columns([1.2, 1.0])
 
-    # === CỘT TRÁI: NHẬP THÔNG TIN ORDER ===
     with col_order:
         st.subheader("FREESTYLE - Ly nước của bạn")
         
-        # 1. Chọn món nước
         selected_drink_name = st.selectbox("1. Chọn món nước yêu thích của bạn:", list(ALL_DRINKS.keys()))
         drink_info = ALL_DRINKS[selected_drink_name]
         
-        # 2. Chọn Size
         selected_size = st.selectbox("2. Chọn Size:", list(SIZE_OPTIONS.keys()))
         
-        # 3. Mức đường & 4. Mức đá
         c_sugar, c_ice = st.columns(2)
         with c_sugar:
             selected_sugar = st.selectbox("3. Mức đường:", list(SUGAR_LEVELS.keys()))
@@ -377,14 +360,9 @@ with nav_tabs[3]:
             selected_ice = st.selectbox("4. Mức đá:", list(ICE_LEVELS.keys()))
             
         selected_toppings = st.multiselect("Topping chọn thêm:", list(TOPPING_OPTIONS.keys()))
-        
-        # 5. Số lượng
         quantity = st.number_input("5. Số lượng:", min_value=1, value=1, step=1)
-        
-        # Địa điểm giao hàng
         address = st.text_input("📍 Địa điểm chọn giao hàng:", placeholder="Nhập địa chỉ giao hàng...")
 
-        # Tính toán chi phí
         base_price = drink_info["price"]
         size_price = SIZE_OPTIONS[selected_size]["price"]
         topping_price = sum(TOPPING_OPTIONS[t]["price"] for t in selected_toppings)
@@ -393,16 +371,15 @@ with nav_tabs[3]:
 
         st.markdown(f"### 💰 Tổng tiền: **{total_price:,} VNĐ**")
 
-        # Nút thanh toán bằng QR
         if st.button("💳 Bấm thanh toán bằng mã QR", type="primary", use_container_width=True):
             if not address:
                 st.warning("Vui lòng nhập địa điểm giao hàng trước khi thanh toán!")
             else:
                 st.success("Tạo đơn thành công! Vui lòng quét mã QR bên dưới để hoàn tất thanh toán:")
                 qr_url = f"https://img.vietqr.io/image/MB-0000000000-compact2.png?amount={total_price}&addInfo=CoAndMay_{selected_drink_name}"
-                st.image(qr_url, caption=f"Mã QR thanh toán tự động: {total_price:,} VNĐ", width=260)
+                st.image(qr_url, caption=f"Mã QR thanh toán: {total_price:,} VNĐ", width=260)
 
-    # === CỘT PHẢI: BỘ MÔ PHỎNG LY NƯỚC ĐỘNG (CSS VISUALIZER) ===
+    # === CỘT MÔ PHỎNG LY NƯỚC ĐÃ SỬA LỖI XUẤT HTML ===
     with col_visual:
         st.subheader("🎨 Mô phỏng trực quan ly nước")
         
@@ -417,12 +394,14 @@ with nav_tabs[3]:
         bottom_toppings = [TOPPING_OPTIONS[t]["icon"] for t in selected_toppings if t != "Kem Cheese"]
         topping_html = " ".join(bottom_toppings) if bottom_toppings else ""
         cheese_html = '<div class="cheese-foam"></div>' if has_cheese else ''
+        ice_html = f'<div class="ice-cubes">{ice_cubes}</div>' if ice_cubes else ''
 
-        st.markdown(f"""
+        # Ghép chuỗi HTML rõ ràng, chuẩn định dạng
+        visual_html = f"""
         <div class="visualizer-container">
             <div class="boba-cup" style="height: {cup_h}; width: {cup_w};">
                 <div class="straw"></div>
-                {f'<div class="ice-cubes">{ice_cubes}</div>' if ice_cubes else ''}
+                {ice_html}
                 <div class="boba-liquid" style="height: {fill_h}; background-color: {drink_color}; opacity: {sugar_op};">
                     {cheese_html}
                 </div>
@@ -434,10 +413,11 @@ with nav_tabs[3]:
                 <span class="spec-tag">{ICE_LEVELS[selected_ice]['label']}</span>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        """
+        st.markdown(visual_html, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 5: TỦ SÁCH CỦA CỎ (28 -> 35.jpg)
+# TAB 5: TỦ SÁCH CỦA CỎ
 # ---------------------------------------------------------
 with nav_tabs[4]:
     st.header("📚 Tủ Sách Của CỎ")
@@ -455,7 +435,7 @@ with nav_tabs[4]:
     """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 6: BẢN NHẠC CỦA MÂY (36 -> 40.jpg)
+# TAB 6: BẢN NHẠC CỦA MÂY
 # ---------------------------------------------------------
 with nav_tabs[5]:
     st.header("🎶 Bản Nhạc Của MÂY")
