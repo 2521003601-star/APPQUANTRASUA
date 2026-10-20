@@ -1,137 +1,164 @@
 import streamlit as st
 import pandas as pd
-import random
-
-# Cấu hình trang
-st.set_page_config(page_title="Chiikawa Boba - OATSIDE Style", page_icon="🧋", layout="wide")
 
 # ---------------------------------------------------------
-# OATSIDE BRANDING - CUSTOM CSS & ANIMATIONS
+# 1. CẤU HÌNH TRANG STREAMLIT (BẮT BUỘC Ở ĐẦU FILE)
+# ---------------------------------------------------------
+st.set_page_config(
+    page_title="CỎ & MÂY Coffee",
+    page_icon="☁️",
+    layout="wide"
+)
+
+# ---------------------------------------------------------
+# 2. CUSTOM CSS GIAO DIỆN & BỘ MÔ PHỎNG LY NƯỚC ĐỘNG
 # ---------------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap');
+    
     html, body, [class*="css"] {
-        font-family: 'Fredoka', cursive, sans-serif;
+        font-family: 'Quicksand', sans-serif;
     }
     .stApp {
-        background-color: #FFF8EE;
+        background-color: #FAF8F5;
     }
-    /* Card kiểu Oatside */
-    .oatside-card {
+    
+    /* Header Branding */
+    .brand-header {
+        text-align: center;
+        padding: 18px;
+        background: linear-gradient(135deg, #A8E6CF, #DCEDC1);
+        border-radius: 18px;
+        margin-bottom: 25px;
+        color: #2D5A27;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    
+    /* Card Sản phẩm, Sách, Nhạc */
+    .menu-card {
         background: #FFFFFF;
-        border: 3px solid #1A1A1A;
-        border-radius: 16px;
-        padding: 20px;
-        box-shadow: 5px 5px 0px #1A1A1A;
+        border-radius: 15px;
+        padding: 15px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        text-align: center;
         margin-bottom: 20px;
-        transition: transform 0.2s;
     }
-    .oatside-card:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 7px 7px 0px #1A1A1A;
+
+    /* Container Bộ mô phỏng Ly nước */
+    .visualizer-container {
+        background: #FFFFFF;
+        border: 3px solid #2D3748;
+        border-radius: 24px;
+        padding: 30px 20px;
+        box-shadow: 6px 6px 0px #2D3748;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 440px;
     }
-    /* Hiển thị ly nước mô phỏng */
+    
+    /* Thân ly */
     .boba-cup {
-        width: 120px;
-        height: 180px;
-        border: 4px solid #1A1A1A;
-        border-radius: 0 0 25px 25px;
-        margin: auto;
+        border: 4px solid #2D3748;
+        border-top: none;
+        border-radius: 0 0 35px 35px;
         position: relative;
         overflow: hidden;
-        background: #FFF;
+        background: rgba(255, 255, 255, 0.5);
+        box-shadow: inset 0 0 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        margin: 0 auto;
     }
+
+    /* Ống hút */
+    .straw {
+        width: 14px;
+        height: 80px;
+        background: #E53E3E;
+        position: absolute;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-8deg);
+        border: 2px solid #2D3748;
+        z-index: 10;
+        border-radius: 6px;
+    }
+
+    /* Phần chất lỏng */
     .boba-liquid {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background-color: #E6C280;
-        transition: height 0.3s ease;
+        transition: height 0.4s ease, background-color 0.4s ease, opacity 0.4s ease;
+        border-radius: 0 0 30px 30px;
     }
-    .boba-topping {
+
+    /* Lớp Kem Cheese */
+    .cheese-foam {
         position: absolute;
-        bottom: 5px;
+        top: 0;
+        width: 100%;
+        height: 25px;
+        background-color: #FFFDD0;
+        border-bottom: 2px dashed #D69E2E;
+        z-index: 4;
+    }
+
+    /* Topping đáy ly */
+    .topping-layer {
+        position: absolute;
+        bottom: 8px;
         width: 100%;
         text-align: center;
-        font-size: 18px;
+        font-size: 20px;
+        z-index: 3;
+        letter-spacing: 2px;
+        user-select: none;
+    }
+
+    /* Viên Đá */
+    .ice-cubes {
+        position: absolute;
+        top: 30px;
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        z-index: 5;
+        user-select: none;
+    }
+
+    /* Thông số bên dưới ly */
+    .spec-tag {
+        display: inline-block;
+        background: #EBF8FF;
+        border: 2px solid #3182CE;
+        color: #2B6CB0;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: bold;
+        margin: 3px;
+        font-size: 0.85rem;
+    }
+    
+    /* Khung ghi chú footer */
+    .footer-quote {
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #2F855A;
+        background: #EDFDFA;
+        padding: 15px;
+        border-radius: 12px;
+        border: 2px dashed #38B2AC;
+        margin-top: 30px;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 1: FLAVOR FINDER (TÌM MÓN THEO TÂM TRẠNG - KIỂU OATSIDE)
+# 3. KHO DỮ LIỆU CÁC MỤC (MENU, SÁCH, NHẠC)
 # ---------------------------------------------------------
-st.title("🧋 CHIIKAWA BOBA WORLD")
-st.caption("Trải nghiệm Order Trà Sữa Phong Cách OATSIDE!")
-
-tab_order, tab_mood, tab_secret = st.tabs(["🛒 Order Nhanh", "🎯 Gợi Ý Theo Tâm Trạng", "🎲 Món Quà Bất Ngờ"])
-
-with tab_mood:
-    st.markdown("### 🎭 Hôm nay năng lượng của bạn thế nào?")
-    
-    col_q1, col_q2 = st.columns(2)
-    with col_q1:
-        mood = st.radio("1. Bạn đang cảm thấy...", ["Cực kỳ năng động ⚡", "Cần chạy deadline 💻", "Hơi suy / Buồn xỉu ☁️", "Thèm ngọt đỉnh điểm 🍩"])
-    with col_q2:
-        sweet_pref = st.select_slider("2. Mức độ thèm ngọt:", options=["Nhẹ nhàng", "Vừa đủ", "Đậm đà", "Bùng nổ"])
-
-    if st.button("✨ Tìm Ly Trà Sữa Chân Truyền", type="primary"):
-        st.markdown("<div class='oatside-card'>", unsafe_allow_html=True)
-        if "Cực kỳ năng động" in mood:
-            st.subheader("🎉 Món gợi ý: Trà Đào Cam Sả Hachiware!")
-            st.write("Sảng khoái, tươi mát, giúp bạn duy trì 200% năng lượng quậy phá cả ngày.")
-        elif "deadline" in mood:
-            st.subheader("⚡ Món gợi ý: Trà Sữa Ô Long Kem Cheese!")
-            st.write("Vị trà đậm đà tỉnh táo kết hợp lớp kem béo ngậy nạp lại năng lượng trí não.")
-        else:
-            st.subheader("🧋 Món gợi ý: Trà Sữa Trân Châu Đường Đen Usagi!")
-            st.write("Ngọt ngào êm dịu xoa dịu mọi nỗi buồn.")
-        st.markdown("</div>", unsafe_allow_html=True)
-
-with tab_secret:
-    st.markdown("### 🎲 Không biết uống gì? Để Usagi chọn giúp!")
-    if st.button("🎰 Quay Số Chọn Món Ngẫu Nhiên"):
-        drinks = ["Trà Sữa Truyền Thống", "Trà Sữa Thái Xanh", "Trà Sữa Matcha", "Trà Dâu Tằm"]
-        toppings = ["Trân châu đen", "Pudding trứng", "Kem Cheese"]
-        chosen_drink = random.choice(drinks)
-        chosen_topping = random.choice(toppings)
-        
-        st.success(f"🎯 Usagi gợi ý cho bạn: **{chosen_drink}** kèm **{chosen_topping}**!")
-
-with tab_order:
-    # ---------------------------------------------------------
-    # TRỰC QUAN HÓA LY TRÀ SỮA ĐỘNG (VISUAL CUSTOMIZER)
-    # ---------------------------------------------------------
-    col_input, col_visual = st.columns([1.2, 0.8])
-    
-    with col_input:
-        tea_choice = st.selectbox("Món nước:", ["Trà Sữa Truyền Thống", "Trà Sữa Thái Xanh", "Trà Sữa Ô Long"])
-        size_choice = st.radio("Size:", ["S", "M", "L"], horizontal=True)
-        ice_choice = st.select_slider("Đá:", ["0%", "30%", "50%", "100%"])
-        topping_choice = st.multiselect("Topping:", ["Trân châu đen", "Pudding trứng", "Kem Cheese"])
-
-    with col_visual:
-        st.markdown("<h4 style='text-align:center;'>Mô phỏng Ly của bạn</h4>", unsafe_allow_html=True)
-        
-        # Tính toán chiều cao nước theo Size
-        height_map = {"S": "50%", "M": "75%", "L": "95%"}
-        color_map = {
-            "Trà Sữa Truyền Thống": "#D2B48C",
-            "Trà Sữa Thái Xanh": "#8FBC8F",
-            "Trà Sữa Ô Long": "#C19A6B"
-        }
-        
-        liquid_height = height_map.get(size_choice, "70%")
-        liquid_color = color_map.get(tea_choice, "#D2B48C")
-        topping_icon = "🧋" if "Trân châu đen" in topping_choice else "🍮" if "Pudding trứng" in topping_choice else ""
-
-        # Render HTML/CSS Ly nước động
-        st.markdown(f"""
-        <div class="boba-cup">
-            <div class="boba-liquid" style="height: {liquid_height}; background-color: {liquid_color};"></div>
-            <div class="boba-topping">{topping_icon}</div>
-        </div>
-        <p style="text-align:center; margin-top: 10px;"><b>Size {size_choice} | {ice_choice} Đá</b></p>
-        """, unsafe_allow_html=True)
+SEASONS_
