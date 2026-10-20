@@ -12,17 +12,17 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 2. CUSTOM CSS: FONT BLACK, TIÊU ĐỀ LẤP LÁNH & CHIIKAWA FOOTER
+# 2. CUSTOM CSS GIAO DIỆN, FONT BLACK MANGO, TIÊU ĐỀ LẤP LÁNH & CHIIKAWA ANIMATION
 # ---------------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap');
+    /* Nạp Font Black Mango */
+    @import url('https://fonts.cdnfonts.com/css/black-mango');
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap');
     
-    /* Font chữ Black & Kích thước to cho toàn bộ Website */
-    html, body, [class*="css"], div, p, span, label {
-        font-family: 'Fredoka', 'Arial Black', 'Impact', sans-serif !important;
-        font-weight: 900 !important;
-        font-size: 1.05rem;
+    html, body, [class*="css"] {
+        font-family: 'Black Mango', 'Quicksand', serif, sans-serif;
+        font-size: 17px;
     }
     
     /* Background Hồng Pastel kèm họa tiết Chấm bi pastel đa sắc */
@@ -35,46 +35,69 @@ st.markdown("""
             radial-gradient(#FFFACD 15%, transparent 16%);
         background-size: 60px 60px;
         background-position: 0 0, 30px 30px, 30px 0, 0 30px;
-        padding-bottom: 110px; /* Tạo khoảng trống cho nhân vật đi dưới chân */
+        padding-bottom: 90px; /* Tránh bị che bởi animation Chiikawa ở đáy màn hình */
     }
     
+    /* Tăng cỡ chữ chung cho các thẻ tiêu đề */
+    h1 {
+        font-size: 3.2rem !important;
+        font-weight: 800 !important;
+    }
+    h2 {
+        font-size: 2.3rem !important;
+        font-weight: 700 !important;
+    }
+    h3 {
+        font-size: 1.8rem !important;
+    }
+    
+    /* Hiệu ứng Lấp lánh (Shimmer Glow) cho Tiêu đề chính */
+    .sparkle-title {
+        font-family: 'Black Mango', serif;
+        font-size: 3.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 0;
+        background: linear-gradient(90deg, #6B4226, #FF69B4, #D2691E, #FF1493, #6B4226);
+        background-size: 200% auto;
+        color: #6B4226;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 3s linear infinite, glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes shimmer {
+        0% { background-position: 0% center; }
+        100% { background-position: 200% center; }
+    }
+
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 5px #FFF, 0 0 10px #FFB6C1, 0 0 15px #FF69B4;
+        }
+        to {
+            text-shadow: 0 0 10px #FFF, 0 0 20px #FF1493, 0 0 30px #FFB6C1;
+        }
+    }
+
     /* Header Branding */
     .brand-header {
         text-align: center;
-        padding: 20px;
-        background: linear-gradient(135deg, #FFB7B2, #FFDAC1);
-        border-radius: 20px;
+        padding: 25px;
+        background: linear-gradient(135deg, rgba(255,183,178,0.9), rgba(255,218,193,0.9));
+        border-radius: 25px;
         margin-bottom: 25px;
-        box-shadow: 0 6px 15px rgba(255, 182, 193, 0.5);
+        border: 3px solid #FFC0CB;
+        box-shadow: 0 8px 20px rgba(255, 182, 193, 0.5);
     }
     
-    /* HIỆU ỨNG TIÊU ĐỀ LẤP LÁNH (SHIMMER / GLOW) */
-    .sparkle-title {
-        font-size: 2.8rem !important;
-        font-weight: 900 !important;
-        background: linear-gradient(90deg, #FF1493, #FFD700, #00BFFF, #FF1493);
-        background-size: 200% auto;
-        color: #fff;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shine 2.5s linear infinite;
-        text-shadow: 2px 2px 8px rgba(255, 105, 180, 0.4);
-        margin: 0;
-    }
-
-    @keyframes shine {
-        to {
-            background-position: 200% center;
-        }
-    }
-    
-    /* Card Sản phẩm */
+    /* Card Sản phẩm & Nội dung */
     .menu-card {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 18px;
         padding: 15px;
-        border: 3px solid #FFB6C1;
-        box-shadow: 0 5px 12px rgba(0,0,0,0.06);
+        border: 2px solid #FFC0CB;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         text-align: center;
         margin-bottom: 20px;
     }
@@ -89,7 +112,7 @@ st.markdown("""
         position: relative;
         overflow: hidden;
         background: #FFFFFF;
-        box-shadow: 5px 5px 0px #FFB6C1;
+        box-shadow: 4px 4px 0px #FFB6C1;
     }
     .boba-liquid {
         position: absolute;
@@ -119,13 +142,13 @@ st.markdown("""
     
     .footer-quote {
         text-align: center;
-        font-size: 1.2rem !important;
-        font-weight: 900;
+        font-size: 1.3rem;
+        font-weight: 700;
         color: #8B4513;
         background: #FFF5F7;
         padding: 18px;
         border-radius: 15px;
-        border: 3px dashed #FFB6C1;
+        border: 2px dashed #FFB6C1;
         margin-top: 30px;
     }
     
@@ -140,57 +163,62 @@ st.markdown("""
     .positive-message {
         background-color: #E8F5E9;
         color: #2E7D32;
-        padding: 14px 20px;
+        padding: 15px 20px;
         border-radius: 12px;
-        border-left: 6px solid #4CAF50;
-        font-weight: 900;
+        border-left: 5px solid #4CAF50;
+        font-weight: 600;
+        font-size: 1.2rem;
         margin-top: 15px;
-        font-size: 1.1rem !important;
     }
 
-    /* THANH HÌNH ĐỘNG NHÂN VẬT CHIIKAWA ĐI DƯỚI MÀN HÌNH */
-    .chiikawa-footer {
+    /* CHIIKAWA BOTTOM WALKING ANIMATION */
+    .chiikawa-container {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 85px;
-        background: rgba(255, 240, 245, 0.9);
-        border-top: 3px solid #FFB6C1;
-        z-index: 99999;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
+        height: 70px;
         pointer-events: none;
+        z-index: 9999;
+        overflow: hidden;
     }
-    
+    .chiikawa-walk {
+        position: absolute;
+        bottom: 5px;
+        display: flex;
+        gap: 40px;
+        animation: walkAround 18s linear infinite;
+    }
     .chiikawa-char {
-        height: 65px;
-        animation: bounce 1.2s infinite alternate ease-in-out;
-    }
-    
-    .chiikawa-char:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-    .chiikawa-char:nth-child(3) {
-        animation-delay: 0.4s;
-    }
-    .chiikawa-char:nth-child(4) {
-        animation-delay: 0.6s;
+        width: 55px;
+        height: 55px;
+        object-fit: contain;
+        filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+        animation: bounceChar 0.6s infinite alternate ease-in-out;
     }
 
-    @keyframes bounce {
-        0% { transform: translateY(0px) rotate(-3deg); }
-        100% { transform: translateY(-12px) rotate(3deg); }
+    @keyframes walkAround {
+        0% { left: -200px; transform: scaleX(1); }
+        48% { left: 100%; transform: scaleX(1); }
+        50% { left: 100%; transform: scaleX(-1); }
+        98% { left: -200px; transform: scaleX(-1); }
+        100% { left: -200px; transform: scaleX(1); }
+    }
+
+    @keyframes bounceChar {
+        0% { transform: translateY(0px); }
+        100% { transform: translateY(-8px); }
     }
 </style>
 
-<!-- DÃY NHÂN VẬT CHIIKAWA DỄ THƯƠNG ĐI DƯỚI MÀN HÌNH -->
-<div class="chiikawa-footer">
-    <img class="chiikawa-char" src="https://cdn-icons-png.flaticon.com/512/3081/3081162.png" alt="Chiikawa">
-    <img class="chiikawa-char" src="https://cdn-icons-png.flaticon.com/512/4721/4721021.png" alt="Hachiware">
-    <img class="chiikawa-char" src="https://cdn-icons-png.flaticon.com/512/2829/2829813.png" alt="Usagi">
-    <img class="chiikawa-char" src="https://cdn-icons-png.flaticon.com/512/3081/3081162.png" alt="Chiikawa 2">
+<!-- Dải nhân vật Chiikawa dễ thương đi lại phía dưới màn hình -->
+<div class="chiikawa-container">
+    <div class="chiikawa-walk">
+        <img src="https://cdn-icons-png.flaticon.com/512/3081/3081162.png" class="chiikawa-char" alt="Chiikawa 1">
+        <img src="https://cdn-icons-png.flaticon.com/512/4359/4359963.png" class="chiikawa-char" alt="Chiikawa 2" style="animation-delay: 0.2s;">
+        <img src="https://cdn-icons-png.flaticon.com/512/2518/2518048.png" class="chiikawa-char" alt="Chiikawa 3" style="animation-delay: 0.4s;">
+        <img src="https://cdn-icons-png.flaticon.com/512/4807/4807695.png" class="chiikawa-char" alt="Chiikawa 4" style="animation-delay: 0.1s;">
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -303,8 +331,8 @@ if "clover_game_initialized" not in st.session_state:
 # ---------------------------------------------------------
 st.markdown("""
 <div class="brand-header">
-    <h1 class="sparkle-title">🍃 CỎ & MÂY COFFEE ☁️</h1>
-    <p style="margin:8px 0 0 0; font-style: italic; font-size: 1.2rem; color: #5C3A21;">"Cỏ giữ chân bạn lại với sự ấm áp, Mây nâng tâm hồn bạn lên với sự nhẹ nhõm."</p>
+    <div class="sparkle-title">🍃 CỎ & MÂY COFFEE ☁️</div>
+    <p style="margin:8px 0 0 0; font-style: italic; font-size: 1.25rem; color: #8B4513;">"Cỏ giữ chân bạn lại với sự ấm áp, Mây nâng tâm hồn bạn lên với sự nhẹ nhõm."</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -322,7 +350,7 @@ nav_tabs = st.tabs([
 # TAB 1: MENU THEO MÙA
 # ---------------------------------------------------------
 with nav_tabs[0]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>🍹 Menu Thức Uống Theo Mùa</h2>", unsafe_allow_html=True)
+    st.header("🍹 Menu Thức Uống Theo Mùa")
     
     st_xuan, st_ha, st_thu, st_dong = st.tabs(["🌸 Mùa Xuân", "☀️ Mùa Hạ", "🍂 Mùa Thu", "❄️ Mùa Đông"])
     
@@ -362,7 +390,7 @@ with nav_tabs[0]:
 # TAB 2: VỊ TRÍ QUÁN
 # ---------------------------------------------------------
 with nav_tabs[1]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>📍 Vị Trí Quán Cỏ & Mây</h2>", unsafe_allow_html=True)
+    st.header("📍 Vị Trí Quán Cỏ & Mây")
     st.subheader("🏠 Địa chỉ: 306 Võ Văn Hát, phường Long Trường, TPHCM")
     st.image("25.jpg", caption="Bản đồ chỉ đường tới quán Cỏ & Mây (25.jpg)", use_container_width=True)
 
@@ -370,7 +398,7 @@ with nav_tabs[1]:
 # TAB 3: VỀ CHÚNG TÔI
 # ---------------------------------------------------------
 with nav_tabs[2]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>📖 Về Chúng Tôi</h2>", unsafe_allow_html=True)
+    st.header("📖 Về Chúng Tôi")
     sub_tab1, sub_tab2 = st.tabs(["💼 Cơ Hội Nghề Nghiệp", "✨ Câu Chuyện Thương Hiệu"])
     
     with sub_tab1:
@@ -418,7 +446,7 @@ with nav_tabs[2]:
 # TAB 4: MUA NGAY!
 # ---------------------------------------------------------
 with nav_tabs[3]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>🛍️ Mua Ngay!</h2>", unsafe_allow_html=True)
+    st.header("🛍️ Mua Ngay!")
     col_order, col_visual = st.columns([1.2, 1.0])
 
     with col_order:
@@ -480,7 +508,7 @@ with nav_tabs[3]:
 # TAB 5: TỦ SÁCH CỦA CỎ
 # ---------------------------------------------------------
 with nav_tabs[4]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>📚 Tủ Sách Của CỎ</h2>", unsafe_allow_html=True)
+    st.header("📚 Tủ Sách Của CỎ")
     cols_books = st.columns(4)
     for idx, book in enumerate(BOOKS_LIST):
         with cols_books[idx % 4]:
@@ -498,7 +526,7 @@ with nav_tabs[4]:
 # TAB 6: BẢN NHẠC CỦA MÂY
 # ---------------------------------------------------------
 with nav_tabs[5]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>🎶 Bản Nhạc Của MÂY</h2>", unsafe_allow_html=True)
+    st.header("🎶 Bản Nhạc Của MÂY")
     cols_music = st.columns(3)
     for idx, song in enumerate(MUSIC_LIST):
         with cols_music[idx % 3]:
@@ -516,7 +544,7 @@ with nav_tabs[5]:
 # TAB 7: MINIGAME TÌM CỎ 4 LÁ
 # ---------------------------------------------------------
 with nav_tabs[6]:
-    st.markdown("<h2 class='sparkle-title' style='font-size:2rem !important;'>🎮 Minigame: Khu Rừng May Mắn - Tìm CỎ 4 LÁ 🍀</h2>", unsafe_allow_html=True)
+    st.header("🎮 Minigame: Khu Rừng May Mắn - Tìm CỎ 4 LÁ 🍀")
     st.write("Hãy khám phá khu rừng Cỏ & Mây! Ẩn chứa trong 20 bụi cây xanh là **10 cây Cỏ 4 Lá**. Mỗi khi tìm thấy một cây Cỏ 4 Lá, bạn sẽ nhận được một thông điệp vô cùng tích cực!")
 
     st.markdown("<div class='game-box'>", unsafe_allow_html=True)
