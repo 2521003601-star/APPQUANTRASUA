@@ -56,7 +56,7 @@ st.markdown("""
         margin-bottom: 20px;
     }
 
-    /* Hiển thị ly nước mô phỏng kiểu Oatside */
+    /* Hiển thị ly nước mô phỏng */
     .boba-cup {
         width: 140px;
         height: 200px;
@@ -106,7 +106,7 @@ st.markdown("""
         margin-top: 30px;
     }
     
-    /* Styling riêng cho Minigame */
+    /* Minigame Box */
     .game-box {
         background: rgba(255, 255, 255, 0.95);
         padding: 25px;
@@ -121,13 +121,13 @@ st.markdown("""
         border-radius: 12px;
         border-left: 5px solid #4CAF50;
         font-weight: 600;
-        margin-top: 10px;
+        margin-top: 15px;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# 3. KHO DỮ LIỆU CÁC MỤC & DỮ LIỆU GAME
+# 3. KHO DỮ LIỆU CHUẨN
 # ---------------------------------------------------------
 SEASONS_MENU = {
     "Mùa Xuân": [
@@ -208,7 +208,6 @@ MUSIC_LIST = [
     {"title": "nhớ ( mỗi tên anh thôi )", "artist": "gia x The Odo ‧ 2020", "img": "40.jpg"},
 ]
 
-# Thông điệp may mắn cho Minigame
 POSITIVE_MESSAGES = [
     "🌟 Bạn là duy nhất, hãy luôn tự tin tỏa sáng theo cách của riêng mình!",
     "☀️ Mọi đám mây đen rồi sẽ qua đi, nhường chỗ cho ánh nắng ấm áp tràn ngập tâm hồn.",
@@ -222,10 +221,9 @@ POSITIVE_MESSAGES = [
     "✨ Cố gắng mỗi ngày một chút, bạn đang tiệm cận đến phiên bản tuyệt vời nhất!"
 ]
 
-# Khởi tạo trạng thái Game trong session_state
+# Khởi tạo Minigame
 if "clover_game_initialized" not in st.session_state:
     st.session_state.clover_game_initialized = True
-    # Tạo rừng cây gồm 20 bụi cây, trong đó ngẫu nhiên có 10 Cỏ 4 lá và 10 Cỏ 3 lá
     grid = ["🍀"] * 10 + ["☘️"] * 10
     random.shuffle(grid)
     st.session_state.forest_grid = grid
@@ -358,14 +356,11 @@ with nav_tabs[3]:
     with col_order:
         st.subheader("FREESTYLE - Ly nước của bạn")
         
-        # 1. Chọn món
         selected_drink_name = st.selectbox("1. Chọn món nước yêu thích của bạn:", list(ALL_DRINKS.keys()))
         drink_info = ALL_DRINKS[selected_drink_name]
         
-        # 2. Chọn size
         size_choice = st.radio("2. Chọn Size:", ["S (Vừa)", "M (Lớn)", "L (Đặc biệt)"], horizontal=True)
         
-        # 3. Mức đường & 4. Mức đá
         c_sugar, c_ice = st.columns(2)
         with c_sugar:
             sugar_choice = st.selectbox("3. Mức đường:", ["100%", "70%", "50%", "30%", "0%"])
@@ -376,7 +371,6 @@ with nav_tabs[3]:
         quantity = st.number_input("5. Số lượng:", min_value=1, value=1, step=1)
         address = st.text_input("📍 Địa điểm chọn giao hàng:", placeholder="Nhập địa chỉ giao hàng...")
 
-        # Tính toán giá tiền
         size_extra = 0 if "S" in size_choice else (5000 if "M" in size_choice else 10000)
         topping_extra = len(topping_choice) * 5000
         unit_price = drink_info["price"] + size_extra + topping_extra
@@ -392,7 +386,6 @@ with nav_tabs[3]:
                 qr_url = f"https://img.vietqr.io/image/MB-0000000000-compact2.png?amount={total_price}&addInfo=CoAndMay_{selected_drink_name}"
                 st.image(qr_url, caption=f"Mã QR thanh toán: {total_price:,} VNĐ", width=260)
 
-    # === CỘT MÔ PHỎNG LY NƯỚC ===
     with col_visual:
         st.markdown("<h4 style='text-align:center;'>Mô phỏng Ly của bạn</h4>", unsafe_allow_html=True)
         
@@ -452,24 +445,21 @@ with nav_tabs[5]:
     """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------
-# TAB 7: MINIGAME TÌM CỎ 4 LÁ (MỚI BỔ SUNG)
+# TAB 7: MINIGAME TÌM CỎ 4 LÁ
 # ---------------------------------------------------------
 with nav_tabs[6]:
-    st.header("🎮 Minigame: Khu Rừng May Mắn - Tìm Cỏ 4 Lá 🍀")
+    st.header("🎮 Minigame: Khu Rừng May Mắn - Tìm CỎ 4 LÁ 🍀")
     st.write("Hãy khám phá khu rừng Cỏ & Mây! Ẩn chứa trong 20 bụi cây xanh là **10 cây Cỏ 4 Lá**. Mỗi khi tìm thấy một cây Cỏ 4 Lá, bạn sẽ nhận được một thông điệp vô cùng tích cực!")
 
     st.markdown("<div class='game-box'>", unsafe_allow_html=True)
     
-    # Tiến trình trò chơi
     found_count = len(st.session_state.found_clovers)
     st.progress(found_count / 10)
     st.markdown(f"#### 🎯 Tiến độ: **{found_count}/10** Cỏ 4 lá đã được tìm thấy")
 
-    # Render lưới khu rừng 4x5
     cols_game = st.columns(5)
     for idx in range(20):
         with cols_game[idx % 5]:
-            # Nếu vị trí này đã được bấm mở
             if idx in st.session_state.found_clovers:
                 item = st.session_state.forest_grid[idx]
                 st.button(f"{item}", key=f"btn_found_{idx}", disabled=True, use_container_width=True)
@@ -484,7 +474,6 @@ with nav_tabs[6]:
                         st.toast("☘️ Đây là Cỏ 3 lá rồi, hãy thử bụi cây khác nhé!", icon="🍃")
                     st.rerun()
 
-    # Hiển thị thông điệp truyền năng lượng tích cực
     if st.session_state.last_message:
         st.markdown(f"""
         <div class="positive-message">
@@ -492,7 +481,6 @@ with nav_tabs[6]:
         </div>
         """, unsafe_allow_html=True)
 
-    # Khi đã hoàn thành tìm đủ 10 cỏ 4 lá
     if found_count == 10:
         st.balloons()
         st.success("🎉 Chúc mừng bạn đã tìm đủ 10/10 Cỏ 4 Lá! Hy vọng niềm vui và sự may mắn sẽ luôn đồng hành cùng bạn!")
