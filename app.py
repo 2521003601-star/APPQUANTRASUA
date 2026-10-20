@@ -221,10 +221,10 @@ SUGAR_LEVELS = {
 }
 
 ICE_LEVELS = {
-    "100% (Bình thường)": {"cubes": "🧊 🧊 🧊", "label": "100% Đá"},
-    "70%": {"cubes": "🧊 🧊", "label": "70% Đá"},
-    "50%": {"cubes": "🧊 🧊", "label": "50% Đá"},
-    "30%": {"cubes": "🧊", "label": "30% Đá"},
+    "100% (Bình thường)": {"cubes": "🧊 🧊🧊🧊🧊🧊🧊🧊 🧊🧊", "label": "100% Đá"},
+    "70%": {"cubes": "🧊 🧊🧊🧊🧊🧊🧊", "label": "70% Đá"},
+    "50%": {"cubes": "🧊🧊🧊🧊 🧊", "label": "50% Đá"},
+    "30%": {"cubes": "🧊🧊🧊", "label": "30% Đá"},
     "0% (Không đá)": {"cubes": "", "label": "0% Đá"}
 }
 
@@ -232,8 +232,8 @@ TOPPING_OPTIONS = {
     "Trân châu đen": {"price": 5000, "icon": "⚫⚫⚫"},
     "Trân châu trắng": {"price": 7000, "icon": "⚪⚪⚪"},
     "Thạch trái cây": {"price": 5000, "icon": "🟩🟨🟥"},
-    "Pudding trứng": {"price": 8000, "icon": "🍮"},
-    "Kem Cheese": {"price": 10000, "icon": "🧀"}
+    "Pudding trứng": {"price": 8000, "icon": "🍮🍮🍮🍮🍮"},
+    "Kem Cheese": {"price": 10000, "icon": "🧀🧀🧀🧀🧀"}
 }
 
 BOOKS_LIST = [
