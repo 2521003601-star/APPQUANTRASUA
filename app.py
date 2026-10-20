@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------
-# 2. CUSTOM CSS GIAO DIỆN & MÔ PHỎNG LY NƯỚC (CODE 1)
+# 2. CUSTOM CSS GIAO DIỆN & MÔ PHỎNG LY NƯỚC ĐỘNG
 # ---------------------------------------------------------
 st.markdown("""
 <style>
@@ -46,10 +46,10 @@ st.markdown("""
         margin-bottom: 20px;
     }
 
-    /* Hiển thị ly nước mô phỏng kiểu Oatside */
+    /* Hiển thị ly nước mô phỏng kiểu Oatside nâng cấp */
     .boba-cup {
-        width: 130px;
-        height: 190px;
+        width: 140px;
+        height: 200px;
         border: 4px solid #1A1A1A;
         border-radius: 0 0 25px 25px;
         margin: auto;
@@ -64,13 +64,26 @@ st.markdown("""
         width: 100%;
         transition: height 0.3s ease, background-color 0.3s ease;
     }
+    /* Icon Đá rơi phía trên */
+    .boba-ice {
+        position: absolute;
+        top: 20px;
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        z-index: 6;
+        user-select: none;
+    }
+    /* Icon Topping xếp đáy ly */
     .boba-topping {
         position: absolute;
         bottom: 5px;
         width: 100%;
         text-align: center;
-        font-size: 22px;
+        font-size: 20px;
         z-index: 5;
+        letter-spacing: 2px;
+        user-select: none;
     }
     
     .footer-quote {
@@ -125,7 +138,6 @@ SEASONS_MENU = {
     ]
 }
 
-# Tạo danh sách các món nước đơn giản
 ALL_DRINKS = {}
 for season_key in SEASONS_MENU:
     for drink in SEASONS_MENU[season_key]:
@@ -135,6 +147,21 @@ HEIGHT_MAP = {
     "S (Vừa)": "50%",
     "M (Lớn)": "75%",
     "L (Đặc biệt)": "95%"
+}
+
+# Bản đồ quy đổi Đá thành Icon viên đá
+ICE_ICON_MAP = {
+    "0%": "",
+    "30%": "🧊",
+    "50%": "🧊 🧊",
+    "100%": "🧊 🧊 🧊"
+}
+
+# Bản đồ quy đổi Topping thành Icon
+TOPPING_ICON_MAP = {
+    "Trân châu đen": "🧋",
+    "Pudding trứng": "🍮",
+    "Kem Cheese": "🧀"
 }
 
 BOOKS_LIST = [
@@ -273,7 +300,7 @@ with nav_tabs[2]:
             """)
 
 # ---------------------------------------------------------
-# TAB 4: MUA NGAY!
+# TAB 4: MUA NGAY! (ĐÃ CẬP NHẬT HIỂN THỊ ĐÁ & ĐA TOPPING)
 # ---------------------------------------------------------
 with nav_tabs[3]:
     st.header("🛍️ Mua Ngay!")
@@ -316,18 +343,25 @@ with nav_tabs[3]:
                 qr_url = f"https://img.vietqr.io/image/MB-0000000000-compact2.png?amount={total_price}&addInfo=CoAndMay_{selected_drink_name}"
                 st.image(qr_url, caption=f"Mã QR thanh toán: {total_price:,} VNĐ", width=260)
 
-    # === CỘT MÔ PHỎNG LY NƯỚC ===
+    # === CỘT MÔ PHỎNG LY NƯỚC (HIỂN THỊ ĐẦY ĐỦ ĐÁ VÀ TẤT CẢ TOPPING) ===
     with col_visual:
         st.markdown("<h4 style='text-align:center;'>Mô phỏng Ly của bạn</h4>", unsafe_allow_html=True)
         
         liquid_height = HEIGHT_MAP.get(size_choice, "70%")
         liquid_color = drink_info["color"]
-        topping_icon = "🧋" if "Trân châu đen" in topping_choice else ("🍮" if "Pudding trứng" in topping_choice else ("🧀" if "Kem Cheese" in topping_choice else ""))
+        
+        # 1. Ghép tất cả các Icon Topping được chọn
+        topping_icons = [TOPPING_ICON_MAP[t] for t in topping_choice if t in TOPPING_ICON_MAP]
+        topping_display = " ".join(topping_icons)
+        
+        # 2. Lấy Icon Đá tương ứng mức %
+        ice_display = ICE_ICON_MAP.get(ice_choice, "")
 
         cup_html = f"""
         <div class="boba-cup">
+            <div class="boba-ice">{ice_display}</div>
             <div class="boba-liquid" style="height: {liquid_height}; background-color: {liquid_color};"></div>
-            <div class="boba-topping">{topping_icon}</div>
+            <div class="boba-topping">{topping_display}</div>
         </div>
         <p style="text-align:center; margin-top: 15px;">
             <b>Size {size_choice.split()[0]} | Đường {sugar_choice} | Đá {ice_choice}</b>
